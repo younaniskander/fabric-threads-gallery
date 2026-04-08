@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import GlassThemeToggle from "@/components/GlassThemeToggle";
 import adamLogoBlack from "@/assets/adam-logo-black.png";
 
 const platformLabels: Record<string, Record<string, string>> = {
@@ -25,16 +26,30 @@ const platformIcons: Record<string, string> = {
 
 type SocialLink = { id: string; platform: string; url: string; is_active: boolean };
 
+const productCategories = [
+  { slug: "upholstery", ar: "التنجيد", en: "Upholstery" },
+  { slug: "velvet", ar: "المخمل", en: "Velvet" },
+  { slug: "print", ar: "المطبوع", en: "Print" },
+  { slug: "drapes", ar: "الستائر", en: "Drapes" },
+  { slug: "embroidery", ar: "المطرز", en: "Embroidery" },
+  { slug: "like-leather", ar: "شبه الجلد", en: "Like-Leather Fabric" },
+  { slug: "plain", ar: "السادة", en: "Plain" },
+  { slug: "hotels", ar: "الفندقية", en: "Hotels" },
+  { slug: "ready-made-curtains", ar: "ستائر جاهزة", en: "Ready-made Curtains" },
+];
+
 const Navbar = () => {
   const { lang, setLang, t } = useLanguage();
   const { totalItems, setIsOpen: setCartOpen } = useCart();
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [contactDropdownOpen, setContactDropdownOpen] = useState(false);
+  const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const location = useLocation();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const contactDropdownRef = useRef<HTMLDivElement>(null);
+  const productsDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     supabase.from("social_links").select("*").then(({ data }) => {
@@ -44,7 +59,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setDropdownOpen(false);
+      if (contactDropdownRef.current && !contactDropdownRef.current.contains(e.target as Node)) setContactDropdownOpen(false);
+      if (productsDropdownRef.current && !productsDropdownRef.current.contains(e.target as Node)) setProductsDropdownOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -66,6 +82,8 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between md:h-20">
           {/* Left actions */}
           <div className="flex items-center gap-3">
+            <GlassThemeToggle />
+
             {/* Language toggle */}
             <button
               onClick={() => setLang(lang === "ar" ? "en" : "ar")}
@@ -105,17 +123,54 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
-              {/* Social dropdown */}
-              <div className="relative" ref={dropdownRef}>
+
+              {/* Products dropdown */}
+              <div className="relative" ref={productsDropdownRef}>
                 <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  onClick={() => setProductsDropdownOpen(!productsDropdownOpen)}
+                  className={`flex items-center gap-1 transition-colors hover:text-primary ${
+                    location.pathname.startsWith("/category") ? "text-primary font-semibold" : "text-muted-foreground"
+                  }`}
+                >
+                  {lang === "ar" ? "المنتجات" : "Products"}
+                  <ChevronDown size={14} className={`transition-transform ${productsDropdownOpen ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {productsDropdownOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="absolute end-0 top-full mt-2 w-52 rounded-xl border border-border bg-card p-2 shadow-lg"
+                    >
+                      {productCategories.map((cat) => (
+                        <Link
+                          key={cat.slug}
+                          to={`/category/${cat.slug}`}
+                          onClick={() => setProductsDropdownOpen(false)}
+                          className={`block rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted ${
+                            location.pathname === `/category/${cat.slug}` ? "text-primary font-semibold bg-muted" : "text-foreground"
+                          }`}
+                        >
+                          {lang === "ar" ? cat.ar : cat.en}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Contact dropdown */}
+              <div className="relative" ref={contactDropdownRef}>
+                <button
+                  onClick={() => setContactDropdownOpen(!contactDropdownOpen)}
                   className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary"
                 >
                   {t("nav.contact")}
-                  <ChevronDown size={14} className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown size={14} className={`transition-transform ${contactDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
-                  {dropdownOpen && (
+                  {contactDropdownOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: -5 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -126,7 +181,7 @@ const Navbar = () => {
                         <a
                           key={link.id} href={link.url} target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-                          onClick={() => setDropdownOpen(false)}
+                          onClick={() => setContactDropdownOpen(false)}
                         >
                           <span>{platformIcons[link.platform] || "🔗"}</span>
                           {platformLabels[link.platform]?.[lang] || link.platform}
@@ -221,9 +276,28 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              {/* Mobile Products section */}
+              <div className="border-t border-border pt-3">
+                <p className="text-xs text-muted-foreground mb-2">{lang === "ar" ? "المنتجات" : "Products"}</p>
+                {productCategories.map((cat) => (
+                  <Link
+                    key={cat.slug}
+                    to={`/category/${cat.slug}`}
+                    onClick={() => setIsOpen(false)}
+                    className={`block py-2 text-sm ${
+                      location.pathname === `/category/${cat.slug}` ? "text-primary font-semibold" : "text-muted-foreground"
+                    }`}
+                  >
+                    {lang === "ar" ? cat.ar : cat.en}
+                  </Link>
+                ))}
+              </div>
+
               <Link to={user ? "/profile" : "/auth"} onClick={() => setIsOpen(false)} className="py-2 text-sm text-muted-foreground">
                 {user ? (lang === "ar" ? "حسابي" : "My Account") : t("nav.signIn")}
               </Link>
+
               <div className="border-t border-border pt-3">
                 <p className="text-xs text-muted-foreground mb-2">{t("nav.contact")}</p>
                 {activeLinks.map((link) => (
