@@ -7,7 +7,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import GlassThemeToggle from "@/components/GlassThemeToggle";
+import { useTheme } from "@/contexts/ThemeContext";
 import adamLogoBlack from "@/assets/adam-logo-black.png";
+import adamLogoWhite from "@/assets/adam-logo-white.png";
 
 const platformLabels: Record<string, Record<string, string>> = {
   facebook: { ar: "فيسبوك", en: "Facebook" },
@@ -42,6 +44,7 @@ const Navbar = () => {
   const { lang, setLang, t } = useLanguage();
   const { totalItems, setIsOpen: setCartOpen } = useCart();
   const { user } = useAuth();
+  const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [contactDropdownOpen, setContactDropdownOpen] = useState(false);
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
@@ -105,7 +108,7 @@ const Navbar = () => {
 
           {/* Center logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
-            <img src={adamLogoBlack} alt="ADAM Fabrics" className="h-12 md:h-14 object-contain" />
+            <img src={theme === "dark" ? adamLogoWhite : adamLogoBlack} alt="ADAM Fabrics" className="h-12 md:h-14 object-contain" />
           </Link>
 
           {/* Right nav + actions */}

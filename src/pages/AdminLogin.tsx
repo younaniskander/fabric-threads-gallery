@@ -8,11 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import adamLogoBlack from "@/assets/adam-logo-black.png";
+import adamLogoWhite from "@/assets/adam-logo-white.png";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const FIRST_ADMIN_EMAIL = "admin@adamfabrics.com";
 const FIRST_ADMIN_PASSWORD = "AdamAdmin#2026";
 
 const AdminLogin = () => {
+  const { theme } = useTheme();
   const [email, setEmail] = useState(FIRST_ADMIN_EMAIL);
   const [password, setPassword] = useState(FIRST_ADMIN_PASSWORD);
   const [loading, setLoading] = useState(false);
@@ -72,7 +75,7 @@ const AdminLogin = () => {
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="mb-8 text-center">
-          <img src={adamLogoBlack} alt="ADAM Fabrics" className="mx-auto mb-4 h-20 w-20" />
+          <img src={theme === "dark" ? adamLogoWhite : adamLogoBlack} alt="ADAM Fabrics" className="mx-auto mb-4 h-20 w-20" />
           <h1 className="font-display text-2xl text-foreground">لوحة تحكم المشرف</h1>
           <p className="mt-1 font-body text-sm text-muted-foreground">تسجيل دخول المشرف</p>
         </div>

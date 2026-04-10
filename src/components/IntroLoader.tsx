@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "@/assets/adam-logo-black.png";
+import logoBlack from "@/assets/adam-logo-black.png";
+import logoWhite from "@/assets/adam-logo-white.png";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface IntroLoaderProps {
   onComplete: () => void;
 }
 
 const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
+  const { theme } = useTheme();
   const [phase, setPhase] = useState<"video" | "fadeout">("video");
 
   useEffect(() => {
@@ -45,7 +48,7 @@ const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <img src={logo} alt="ADAM Fabrics" className="w-40 h-40 shadow-fabric opacity-80" />
+            <img src={theme === "dark" ? logoWhite : logoBlack} alt="ADAM Fabrics" className="w-40 h-40 shadow-fabric opacity-80" />
           </motion.div>
         </div>
       </motion.div>
