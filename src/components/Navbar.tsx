@@ -107,8 +107,8 @@ const Navbar = () => {
           </div>
 
           {/* Center logo */}
-          <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
-            <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-12 md:h-14 object-contain" />
+          <Link to="/" className="absolute left-1/2 -translate-x-1/2 z-10 flex items-center">
+            <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-16 md:h-20 w-auto object-contain" />
           </Link>
 
           {/* Right nav + actions */}
