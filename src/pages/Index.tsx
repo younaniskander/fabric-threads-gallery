@@ -13,6 +13,7 @@ import FeaturesBar from "@/components/FeaturesBar";
 import CollectionBanners from "@/components/CollectionBanners";
 import SectionHeader from "@/components/SectionHeader";
 import UpholsteryIntro from "@/components/UpholsteryIntro";
+import StickyScrollFabrics from "@/components/StickyScrollFabrics";
 
 const Index = () => {
   const { t } = useLanguage();
