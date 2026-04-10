@@ -9,7 +9,7 @@ const GlassThemeToggle = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="relative flex h-7 w-14 items-center rounded-full border border-border/30 overflow-hidden transition-colors duration-300"
+      className="relative flex h-7 w-14 items-center rounded-full border border-border/30 overflow-hidden p-[3px] transition-colors duration-300"
       style={{
         background: isDark
           ? "linear-gradient(135deg, hsl(0 0% 12% / 0.9), hsl(0 0% 8% / 0.95))"
@@ -21,15 +21,13 @@ const GlassThemeToggle = () => {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
       <motion.div
-        className="flex h-5 w-5 items-center justify-center rounded-full shadow-md"
+        className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full shadow-md"
         style={{
           background: isDark
             ? "linear-gradient(135deg, hsl(0 0% 30%), hsl(0 0% 20%))"
             : "linear-gradient(135deg, hsl(40 33% 98%), hsl(40 20% 92%))",
-          marginLeft: 3,
-          marginRight: 3,
         }}
-        animate={{ x: isDark ? 28 : 0 }}
+        animate={{ x: isDark ? 26 : 0 }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}
       >
         {isDark ? (
