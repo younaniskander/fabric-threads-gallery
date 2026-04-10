@@ -1,14 +1,23 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { motion } from "framer-motion";
 
 const GlassThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
+  const { lang } = useLanguage();
   const isDark = theme === "dark";
+  const isRTL = lang === "ar";
+
+  // In RTL, the toggle starts from the right, so we invert the direction
+  const thumbX = isDark
+    ? (isRTL ? -26 : 26)
+    : 0;
 
   return (
     <button
       onClick={toggleTheme}
+      dir="ltr"
       className="relative flex h-7 w-14 items-center rounded-full border border-border/30 overflow-hidden p-[3px] transition-colors duration-300"
       style={{
         background: isDark
