@@ -83,8 +83,12 @@ const Navbar = () => {
     <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between md:h-20">
-          {/* Left actions */}
-          <div className="flex items-center gap-3">
+          {/* Left: Logo + actions */}
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center shrink-0">
+              <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-14 md:h-16 w-auto object-contain" />
+            </Link>
+
             <GlassThemeToggle />
 
             {/* Language toggle */}
@@ -105,11 +109,6 @@ const Navbar = () => {
               <Search size={20} />
             </button>
           </div>
-
-          {/* Center logo */}
-          <Link to="/" className="absolute left-1/2 -translate-x-1/2 z-10 flex items-center">
-            <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-16 md:h-20 w-auto object-contain" />
-          </Link>
 
           {/* Right nav + actions */}
           <div className="flex items-center gap-3">
