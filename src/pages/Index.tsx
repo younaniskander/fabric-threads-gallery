@@ -29,6 +29,9 @@ const Index = () => {
       {/* Shop by Category */}
       <CategoryCircles />
 
+      {/* Sticky Scroll Fabrics Showcase */}
+      <StickyScrollFabrics />
+
       {/* Featured Products */}
       <section className="container mx-auto px-4 py-16">
         <div className="flex items-center justify-between mb-10">
