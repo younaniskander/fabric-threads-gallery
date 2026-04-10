@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import adamLogoWhite from "@/assets/adam-logo-white.png";
+import adamLogoDark from "@/assets/adam-logo-dark.png";
 
 const Footer = () => {
   const { lang, t } = useLanguage();
@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-4 md:text-start">
           {/* Brand */}
           <div className="flex flex-col items-center gap-4 md:items-start">
-            <img src={adamLogoWhite} alt="ADAM Fabrics" className="h-16 object-contain" />
+            <img src={adamLogoDark} alt="ADAM Fabrics" className="h-16 object-contain" />
             <p className="max-w-xs font-body text-sm opacity-70">
               {t("footer.about")}
             </p>

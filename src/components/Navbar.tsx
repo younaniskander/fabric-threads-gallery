@@ -8,8 +8,8 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import GlassThemeToggle from "@/components/GlassThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
-import adamLogoBlack from "@/assets/adam-logo-black.png";
-import adamLogoWhite from "@/assets/adam-logo-white.png";
+import adamLogoLight from "@/assets/adam-logo-light.png";
+import adamLogoDark from "@/assets/adam-logo-dark.png";
 
 const platformLabels: Record<string, Record<string, string>> = {
   facebook: { ar: "فيسبوك", en: "Facebook" },
@@ -108,7 +108,7 @@ const Navbar = () => {
 
           {/* Center logo */}
           <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
-            <img src={theme === "dark" ? adamLogoWhite : adamLogoBlack} alt="ADAM Fabrics" className="h-12 md:h-14 object-contain" />
+            <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-12 md:h-14 object-contain" />
           </Link>
 
           {/* Right nav + actions */}

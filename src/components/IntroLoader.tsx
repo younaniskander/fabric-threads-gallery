@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoBlack from "@/assets/adam-logo-black.png";
-import logoWhite from "@/assets/adam-logo-white.png";
+import logoLight from "@/assets/adam-logo-light.png";
+import logoDark from "@/assets/adam-logo-dark.png";
 import { useTheme } from "@/contexts/ThemeContext";
 
 interface IntroLoaderProps {
@@ -48,7 +48,7 @@ const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            <img src={theme === "dark" ? logoWhite : logoBlack} alt="ADAM Fabrics" className="w-40 h-40 shadow-fabric opacity-80" />
+            <img src={theme === "dark" ? logoDark : logoLight} alt="ADAM Fabrics" className="w-40 h-40 shadow-fabric opacity-80" />
           </motion.div>
         </div>
       </motion.div>
