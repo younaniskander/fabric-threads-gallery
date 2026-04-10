@@ -11,6 +11,8 @@ import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import adamLogoBlack from "@/assets/adam-logo-black.png";
+import adamLogoWhite from "@/assets/adam-logo-white.png";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");

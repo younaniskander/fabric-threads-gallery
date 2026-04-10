@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import adamLogoBlack from "@/assets/adam-logo-black.png";
+import adamLogoWhite from "@/assets/adam-logo-white.png";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const FIRST_ADMIN_EMAIL = "admin@adamfabrics.com";
 const FIRST_ADMIN_PASSWORD = "AdamAdmin#2026";
