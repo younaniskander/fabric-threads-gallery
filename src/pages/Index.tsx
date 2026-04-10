@@ -13,6 +13,7 @@ import FeaturesBar from "@/components/FeaturesBar";
 import CollectionBanners from "@/components/CollectionBanners";
 import SectionHeader from "@/components/SectionHeader";
 import UpholsteryIntro from "@/components/UpholsteryIntro";
+import StickyScrollFabrics from "@/components/StickyScrollFabrics";
 
 const Index = () => {
   const { t } = useLanguage();
@@ -27,6 +28,9 @@ const Index = () => {
 
       {/* Shop by Category */}
       <CategoryCircles />
+
+      {/* Sticky Scroll Fabrics Showcase */}
+      <StickyScrollFabrics />
 
       {/* Featured Products */}
       <section className="container mx-auto px-4 py-16">
