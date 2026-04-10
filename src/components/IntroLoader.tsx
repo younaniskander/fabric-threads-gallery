@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoBlack from "@/assets/adam-logo-black.png";
-import logoWhite from "@/assets/adam-logo-white.png";
+import logoLight from "@/assets/adam-logo-light.png";
+import logoDark from "@/assets/adam-logo-dark.png";
 import { useTheme } from "@/contexts/ThemeContext";
 
 interface IntroLoaderProps {
