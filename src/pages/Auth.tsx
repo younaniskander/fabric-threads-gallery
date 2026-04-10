@@ -15,6 +15,7 @@ import adamLogoWhite from "@/assets/adam-logo-white.png";
 import { useTheme } from "@/contexts/ThemeContext";
 
 const Auth = () => {
+  const { theme } = useTheme();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,7 +59,7 @@ const Auth = () => {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="mb-8 text-center">
-            <img src={adamLogoBlack} alt="ADAM" className="mx-auto mb-4 h-20 object-contain" />
+            <img src={theme === "dark" ? adamLogoWhite : adamLogoBlack} alt="ADAM" className="mx-auto mb-4 h-20 object-contain" />
             <h1 className="font-display text-2xl text-foreground">
               {mode === "login"
                 ? (lang === "ar" ? "تسجيل الدخول" : "Sign In")
