@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
 import { toast } from "sonner";
+import PaymentMethods from "@/components/PaymentMethods";
 
 
 const FabricDetail = () => {
