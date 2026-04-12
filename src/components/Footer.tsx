@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import adamLogoLight from "@/assets/adam-logo-light.png";
-import adamLogoDark from "@/assets/adam-logo-dark.png";
+import adamLogoLight from "@/assets/adam-logo-light.svg";
+import adamLogoDark from "@/assets/adam-logo-dark.svg";
 
 const Footer = () => {
   const { lang, t } = useLanguage();
