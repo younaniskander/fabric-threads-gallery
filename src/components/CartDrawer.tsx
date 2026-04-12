@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { toast } from "sonner";
+import PaymentMethods from "@/components/PaymentMethods";
 
 const CartDrawer = () => {
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice, isOpen, setIsOpen } = useCart();
@@ -183,6 +184,7 @@ const CartDrawer = () => {
                     ? (lang === "ar" ? "جاري التحويل..." : "Redirecting...")
                     : (lang === "ar" ? "المتابعة إلى الدفع" : "Proceed to Checkout")}
                 </button>
+                <PaymentMethods compact />
                 <button
                   onClick={clearCart}
                   className="w-full text-sm text-muted-foreground hover:text-destructive font-body transition-colors"
