@@ -1,49 +1,77 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import adamLogoLight from "@/assets/adam-logo-light.png";
 import adamLogoDark from "@/assets/adam-logo-dark.png";
 
 const Footer = () => {
   const { lang, t } = useLanguage();
+  const { theme } = useTheme();
 
   return (
-    <footer className="mt-16 bg-foreground py-12 text-primary-foreground">
+    <footer className="mt-16 border-t border-border bg-background py-14">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-4 md:text-start">
-          {/* Brand */}
-          <div className="flex flex-col items-center gap-4 md:items-start">
-            <img src={adamLogoDark} alt="ADAM Fabrics" className="h-16 object-contain" />
-            <p className="max-w-xs font-body text-sm opacity-70">
-              {t("footer.about")}
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="mb-4 font-display text-lg text-gold">{t("footer.quickLinks")}</h4>
-            <div className="flex flex-col gap-2 font-body text-sm opacity-70">
-              <Link to="/" className="transition-opacity hover:opacity-100">{t("nav.home")}</Link>
-              <Link to="/about" className="transition-opacity hover:opacity-100">{t("nav.about")}</Link>
-              <Link to="/gallery" className="transition-opacity hover:opacity-100">{t("nav.gallery")}</Link>
-              <Link to="/auth" className="transition-opacity hover:opacity-100">{lang === "ar" ? "حسابي" : "My Account"}</Link>
-            </div>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
+          {/* Logo */}
+          <div className="flex items-start justify-center md:justify-start">
+            <img
+              src={theme === "dark" ? adamLogoDark : adamLogoLight}
+              alt="ADAM Fabrics"
+              className="h-20 object-contain"
+            />
           </div>
 
           {/* Categories */}
-          <div>
-            <h4 className="mb-4 font-display text-lg text-gold">{t("footer.categories")}</h4>
-            <div className="flex flex-col gap-2 font-body text-sm opacity-70">
-              <Link to="/gallery?category=upholstery" className="transition-opacity hover:opacity-100">{t("cat.upholstery")}</Link>
-              <Link to="/gallery?category=curtains" className="transition-opacity hover:opacity-100">{t("cat.curtains")}</Link>
-              <Link to="/gallery?type=velvet" className="transition-opacity hover:opacity-100">{t("cat.velvet")}</Link>
-              <Link to="/gallery?type=cotton" className="transition-opacity hover:opacity-100">{t("cat.cotton")}</Link>
-              <Link to="/gallery?type=silk" className="transition-opacity hover:opacity-100">{t("cat.silk")}</Link>
+          <div className="text-center md:text-start">
+            <h4 className="mb-5 font-display text-xl font-semibold text-foreground">
+              {t("footer.categories")}
+            </h4>
+            <div className="flex flex-col gap-3 font-body text-base text-muted-foreground">
+              <Link to="/gallery?category=upholstery" className="transition-colors hover:text-foreground">
+                {t("cat.upholstery")}
+              </Link>
+              <Link to="/gallery?category=curtains" className="transition-colors hover:text-foreground">
+                {t("cat.curtains")}
+              </Link>
+              <Link to="/gallery?type=velvet" className="transition-colors hover:text-foreground">
+                {t("cat.velvet")}
+              </Link>
+              <Link to="/gallery?type=cotton" className="transition-colors hover:text-foreground">
+                {t("cat.cotton")}
+              </Link>
+              <Link to="/gallery?type=silk" className="transition-colors hover:text-foreground">
+                {t("cat.silk")}
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="text-center md:text-start">
+            <h4 className="mb-5 font-display text-xl font-semibold text-foreground">
+              {t("footer.quickLinks")}
+            </h4>
+            <div className="flex flex-col gap-3 font-body text-base text-muted-foreground">
+              <Link to="/" className="transition-colors hover:text-foreground">
+                {t("nav.home")}
+              </Link>
+              <Link to="/about" className="transition-colors hover:text-foreground">
+                {t("nav.about")}
+              </Link>
+              <Link to="/gallery" className="transition-colors hover:text-foreground">
+                {t("nav.gallery")}
+              </Link>
+              <Link to="/auth" className="transition-colors hover:text-foreground">
+                {lang === "ar" ? "حسابي" : "My Account"}
+              </Link>
             </div>
           </div>
 
           {/* Contact */}
-          <div>
-            <h4 className="mb-4 font-display text-lg text-gold">{t("footer.contactUs")}</h4>
-            <div className="flex flex-col gap-2 font-body text-sm opacity-70">
+          <div className="text-center md:text-start">
+            <h4 className="mb-5 font-display text-xl font-semibold text-foreground">
+              {t("footer.contactUs")}
+            </h4>
+            <div className="flex flex-col gap-3 font-body text-base text-muted-foreground">
               <span>📞 +20 100 000 0000</span>
               <span>✉️ info@adamfabrics.com</span>
               <span>📍 {lang === "ar" ? "القاهرة، مصر" : "Cairo, Egypt"}</span>
@@ -51,7 +79,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-primary-foreground/20 pt-6 text-center font-body text-xs opacity-50">
+        <div className="mt-10 border-t border-border pt-6 text-center font-body text-sm text-muted-foreground">
           © {new Date().getFullYear()} ADAM Fabrics. {t("footer.rights")}
         </div>
       </div>
