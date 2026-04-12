@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
-  Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save
+  Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -515,6 +515,11 @@ const BrandsTab = ({ brands, onRefresh }: { brands: any[]; onRefresh: () => void
 // Messages Tab
 const MessagesTab = ({ messages, onRefresh }: { messages: any[]; onRefresh: () => void }) => {
   const { toast } = useToast();
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [sendingReply, setSendingReply] = useState(false);
+  const [replies, setReplies] = useState<Record<string, any[]>>({});
+  const [expandedMsg, setExpandedMsg] = useState<string | null>(null);
 
   const toggleRead = async (id: string, current: boolean) => {
     await supabase.from("messages").update({ is_read: !current }).eq("id", id);
@@ -525,6 +530,47 @@ const MessagesTab = ({ messages, onRefresh }: { messages: any[]; onRefresh: () =
     await supabase.from("messages").delete().eq("id", id);
     toast({ title: "تم حذف الرسالة" });
     onRefresh();
+  };
+
+  const loadReplies = async (messageId: string) => {
+    const { data } = await supabase
+      .from("message_replies")
+      .select("*")
+      .eq("message_id", messageId)
+      .order("created_at", { ascending: true });
+    if (data) setReplies((prev) => ({ ...prev, [messageId]: data }));
+  };
+
+  const handleReply = async (messageId: string) => {
+    if (!replyText.trim()) return;
+    setSendingReply(true);
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from("message_replies").insert({
+      message_id: messageId,
+      reply_text: replyText.trim(),
+      replied_by: user?.id || null,
+    });
+    setSendingReply(false);
+    if (error) {
+      toast({ title: "خطأ", description: "فشل في إرسال الرد", variant: "destructive" });
+    } else {
+      toast({ title: "تم إرسال الرد" });
+      setReplyText("");
+      setReplyingTo(null);
+      loadReplies(messageId);
+      // Mark as read
+      await supabase.from("messages").update({ is_read: true }).eq("id", messageId);
+      onRefresh();
+    }
+  };
+
+  const toggleExpand = (id: string) => {
+    if (expandedMsg === id) {
+      setExpandedMsg(null);
+    } else {
+      setExpandedMsg(id);
+      loadReplies(id);
+    }
   };
 
   return (
@@ -551,14 +597,50 @@ const MessagesTab = ({ messages, onRefresh }: { messages: any[]; onRefresh: () =
                 </span>
               </div>
               <div className="flex gap-1">
+                <Button variant="ghost" size="sm" onClick={() => toggleExpand(m.id)}>
+                  {expandedMsg === m.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </Button>
                 <Button variant="ghost" size="sm" onClick={() => toggleRead(m.id, m.is_read)}>
                   {m.is_read ? <EyeOff size={14} /> : <Eye size={14} />}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => { setReplyingTo(replyingTo === m.id ? null : m.id); setReplyText(""); }}>
+                  <Send size={14} />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => handleDelete(m.id)} className="text-destructive">
                   <Trash2 size={14} />
                 </Button>
               </div>
             </div>
+
+            {/* Replies */}
+            {expandedMsg === m.id && replies[m.id] && replies[m.id].length > 0 && (
+              <div className="mt-3 ms-4 border-s-2 border-primary/30 ps-3 space-y-2">
+                {replies[m.id].map((r: any) => (
+                  <div key={r.id} className="bg-muted rounded-lg p-3">
+                    <p className="font-body text-sm text-foreground">{r.reply_text}</p>
+                    <span className="font-body text-xs text-muted-foreground mt-1 block">
+                      رد الإدارة - {new Date(r.created_at).toLocaleDateString("ar-EG")}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Reply form */}
+            {replyingTo === m.id && (
+              <div className="mt-3 flex gap-2">
+                <Input
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="اكتب الرد..."
+                  className="flex-1 font-body text-sm"
+                  onKeyDown={(e) => { if (e.key === "Enter") handleReply(m.id); }}
+                />
+                <Button size="sm" onClick={() => handleReply(m.id)} disabled={sendingReply} className="gap-1 font-body">
+                  <Send size={14} /> رد
+                </Button>
+              </div>
+            )}
           </motion.div>
         ))}
         {messages.length === 0 && (

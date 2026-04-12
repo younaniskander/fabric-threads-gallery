@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Search, ChevronDown, ShoppingBag, User, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,8 +51,21 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const location = useLocation();
+  const navigate = useNavigate();
   const contactDropdownRef = useRef<HTMLDivElement>(null);
   const productsDropdownRef = useRef<HTMLDivElement>(null);
+
+  const scrollToContact = () => {
+    setIsOpen(false);
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" });
+      }, 500);
+    } else {
+      document.getElementById("contact-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   useEffect(() => {
     supabase.from("social_links").select("*").then(({ data }) => {
@@ -162,13 +175,20 @@ const Navbar = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Contact dropdown */}
+              {/* Contact Us button */}
+              <button
+                onClick={scrollToContact}
+                className="rounded-lg border border-primary bg-primary px-4 py-1.5 text-sm font-body text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                {t("nav.contact")}
+              </button>
+
+              {/* Social dropdown */}
               <div className="relative" ref={contactDropdownRef}>
                 <button
                   onClick={() => setContactDropdownOpen(!contactDropdownOpen)}
                   className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-primary"
                 >
-                  {t("nav.contact")}
                   <ChevronDown size={14} className={`transition-transform ${contactDropdownOpen ? "rotate-180" : ""}`} />
                 </button>
                 <AnimatePresence>
@@ -300,8 +320,16 @@ const Navbar = () => {
                 {user ? (lang === "ar" ? "حسابي" : "My Account") : t("nav.signIn")}
               </Link>
 
+              {/* Mobile contact button */}
+              <button
+                onClick={scrollToContact}
+                className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-body text-primary-foreground text-center"
+              >
+                {t("nav.contact")}
+              </button>
+
               <div className="border-t border-border pt-3">
-                <p className="text-xs text-muted-foreground mb-2">{t("nav.contact")}</p>
+                <p className="text-xs text-muted-foreground mb-2">{lang === "ar" ? "تابعنا" : "Follow Us"}</p>
                 {activeLinks.map((link) => (
                   <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer"
                     onClick={() => setIsOpen(false)}

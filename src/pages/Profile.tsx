@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User as UserIcon, Package, Heart, LogOut, Edit2, Save } from "lucide-react";
+import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-type Tab = "profile" | "orders" | "wishlist";
+type Tab = "profile" | "orders" | "inbox" | "wishlist";
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -24,6 +24,8 @@ const Profile = () => {
   const [editing, setEditing] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+  const [myMessages, setMyMessages] = useState<any[]>([]);
+  const [messageReplies, setMessageReplies] = useState<Record<string, any[]>>({});
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -44,6 +46,18 @@ const Profile = () => {
     // Load wishlist
     supabase.from("wishlist").select("fabric_id").eq("user_id", user.id).then(({ data }) => {
       if (data) setWishlistIds(data.map((w: any) => w.fabric_id));
+    });
+    // Load user messages
+    supabase.from("messages").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => {
+      if (data) {
+        setMyMessages(data);
+        // Load replies for each message
+        data.forEach((msg: any) => {
+          supabase.from("message_replies").select("*").eq("message_id", msg.id).order("created_at", { ascending: true }).then(({ data: replyData }) => {
+            if (replyData) setMessageReplies((prev) => ({ ...prev, [msg.id]: replyData }));
+          });
+        });
+      }
     });
   }, [user]);
 
@@ -70,6 +84,7 @@ const Profile = () => {
   const tabs: { id: Tab; label: string; icon: any }[] = [
     { id: "profile", label: lang === "ar" ? "الملف الشخصي" : "Profile", icon: UserIcon },
     { id: "orders", label: lang === "ar" ? "طلباتي" : "My Orders", icon: Package },
+    { id: "inbox", label: lang === "ar" ? "الرسائل" : "Inbox", icon: Inbox },
     { id: "wishlist", label: lang === "ar" ? "المفضلة" : "Wishlist", icon: Heart },
   ];
 
@@ -162,6 +177,46 @@ const Profile = () => {
                         <p className="text-sm font-body text-foreground">
                           {lang === "ar" ? "الإجمالي:" : "Total:"} {order.total_amount} {lang === "ar" ? "ج.م" : "EGP"}
                         </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {tab === "inbox" && (
+                <div className="space-y-4">
+                  <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "الرسائل والردود" : "Messages & Replies"}</h2>
+                  {myMessages.length === 0 ? (
+                    <div className="bg-card border border-border rounded-xl p-10 text-center">
+                      <MessageSquare size={40} className="mx-auto text-muted-foreground mb-3" />
+                      <p className="text-muted-foreground font-body">{lang === "ar" ? "لا توجد رسائل بعد" : "No messages yet"}</p>
+                    </div>
+                  ) : (
+                    myMessages.map((msg) => (
+                      <div key={msg.id} className="bg-card border border-border rounded-xl p-5">
+                        <div className="mb-3">
+                          <p className="font-body text-sm text-foreground">{msg.message}</p>
+                          <span className="font-body text-xs text-muted-foreground mt-1 block">
+                            {new Date(msg.created_at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}
+                          </span>
+                        </div>
+                        {messageReplies[msg.id] && messageReplies[msg.id].length > 0 ? (
+                          <div className="border-t border-border pt-3 space-y-2">
+                            <p className="font-body text-xs text-primary font-semibold">{lang === "ar" ? "ردود الإدارة:" : "Admin replies:"}</p>
+                            {messageReplies[msg.id].map((r: any) => (
+                              <div key={r.id} className="bg-muted rounded-lg p-3">
+                                <p className="font-body text-sm text-foreground">{r.reply_text}</p>
+                                <span className="font-body text-xs text-muted-foreground mt-1 block">
+                                  {new Date(r.created_at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="border-t border-border pt-3">
+                            <p className="font-body text-xs text-muted-foreground">{lang === "ar" ? "في انتظار الرد..." : "Awaiting reply..."}</p>
+                          </div>
+                        )}
                       </div>
                     ))
                   )}

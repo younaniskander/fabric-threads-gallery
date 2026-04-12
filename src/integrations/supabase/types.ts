@@ -125,6 +125,38 @@ export type Database = {
         }
         Relationships: []
       }
+      message_replies: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          replied_by: string | null
+          reply_text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          replied_by?: string | null
+          reply_text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          replied_by?: string | null
+          reply_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_replies_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           created_at: string
@@ -133,6 +165,7 @@ export type Database = {
           message: string
           name: string
           phone: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -141,6 +174,7 @@ export type Database = {
           message: string
           name: string
           phone?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -149,6 +183,7 @@ export type Database = {
           message?: string
           name?: string
           phone?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
