@@ -14,6 +14,7 @@ import CollectionBanners from "@/components/CollectionBanners";
 import SectionHeader from "@/components/SectionHeader";
 import UpholsteryIntro from "@/components/UpholsteryIntro";
 import StickyScrollFabrics from "@/components/StickyScrollFabrics";
+import ContactSection from "@/components/ContactSection";
 
 const Index = () => {
   const { t } = useLanguage();
@@ -117,6 +118,9 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* Contact Section */}
+      <ContactSection />
 
       {/* Features bar */}
       <FeaturesBar />
