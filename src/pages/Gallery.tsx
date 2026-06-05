@@ -21,6 +21,7 @@ const Gallery = () => {
   const [selectedOrigin, setSelectedOrigin] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
+  const fabrics = useFabrics();
   const filtered = useMemo(() => {
     return fabrics.filter((f) => {
       if (search && !f.name.includes(search) && !f.nameEn.toLowerCase().includes(search.toLowerCase())) return false;
