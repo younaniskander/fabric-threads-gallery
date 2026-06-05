@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
 
-const categoryConfig: Record<string, { ar: string; en: string; filter: (f: typeof fabrics[0]) => boolean }> = {
+const categoryConfig: Record<string, { ar: string; en: string; filter: (f: Fabric) => boolean }> = {
   upholstery: {
     ar: "أقمشة التنجيد",
     en: "Upholstery Fabrics",
