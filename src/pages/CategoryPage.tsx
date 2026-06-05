@@ -61,6 +61,7 @@ const CategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { lang } = useLanguage();
   const config = slug ? categoryConfig[slug] : null;
+  const fabrics = useFabrics();
 
   const filtered = config ? fabrics.filter(config.filter) : [];
   const title = config ? config[lang === "ar" ? "ar" : "en"] : "";
