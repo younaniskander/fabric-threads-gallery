@@ -80,8 +80,7 @@ const Profile = () => {
 
   if (authLoading || !user) return null;
 
-  const fabrics = useFabrics();
-  const wishlistFabrics = fabrics.filter((f) => wishlistIds.includes(f.id));
+  const wishlistFabrics = allFabrics.filter((f) => wishlistIds.includes(f.id));
 
   const tabs: { id: Tab; label: string; icon: any }[] = [
     { id: "profile", label: lang === "ar" ? "الملف الشخصي" : "Profile", icon: UserIcon },
