@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { fabrics } from "@/data/fabrics";
+import { type Fabric } from "@/data/fabrics";
+import { useFabrics } from "@/hooks/useFabrics";
 import { useLanguage } from "@/contexts/LanguageContext";
 import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
