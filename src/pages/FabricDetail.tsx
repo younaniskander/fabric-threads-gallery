@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle, ShoppingBag, Plus, Minus } from "lucide-react";
-import { fabrics, fabricTypes, brands } from "@/data/fabrics";
+import { fabricTypes, brands } from "@/data/fabrics";
+import { useFabrics } from "@/hooks/useFabrics";
 import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
@@ -15,6 +16,7 @@ import PaymentMethods from "@/components/PaymentMethods";
 
 const FabricDetail = () => {
   const { id } = useParams();
+  const fabrics = useFabrics();
   const fabric = fabrics.find((f) => f.id === id);
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);

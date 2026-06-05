@@ -2,7 +2,8 @@ import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { fabrics, fabricTypes, brands, origins } from "@/data/fabrics";
+import { fabricTypes, brands, origins } from "@/data/fabrics";
+import { useFabrics } from "@/hooks/useFabrics";
 import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
 import Navbar from "@/components/Navbar";
@@ -20,6 +21,7 @@ const Gallery = () => {
   const [selectedOrigin, setSelectedOrigin] = useState("");
   const [showFilters, setShowFilters] = useState(false);
 
+  const fabrics = useFabrics();
   const filtered = useMemo(() => {
     return fabrics.filter((f) => {
       if (search && !f.name.includes(search) && !f.nameEn.toLowerCase().includes(search.toLowerCase())) return false;
@@ -29,7 +31,7 @@ const Gallery = () => {
       if (selectedOrigin && f.origin !== selectedOrigin) return false;
       return true;
     });
-  }, [search, selectedType, selectedCategory, selectedBrand, selectedOrigin]);
+  }, [fabrics, search, selectedType, selectedCategory, selectedBrand, selectedOrigin]);
 
   const clearFilters = () => {
     setSearch("");

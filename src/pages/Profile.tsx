@@ -5,7 +5,7 @@ import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSq
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { fabrics } from "@/data/fabrics";
+import { useFabrics } from "@/hooks/useFabrics";
 import FabricCard from "@/components/FabricCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -26,6 +26,7 @@ const Profile = () => {
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [myMessages, setMyMessages] = useState<any[]>([]);
   const [messageReplies, setMessageReplies] = useState<Record<string, any[]>>({});
+  const allFabrics = useFabrics();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -79,7 +80,7 @@ const Profile = () => {
 
   if (authLoading || !user) return null;
 
-  const wishlistFabrics = fabrics.filter((f) => wishlistIds.includes(f.id));
+  const wishlistFabrics = allFabrics.filter((f) => wishlistIds.includes(f.id));
 
   const tabs: { id: Tab; label: string; icon: any }[] = [
     { id: "profile", label: lang === "ar" ? "الملف الشخصي" : "Profile", icon: UserIcon },

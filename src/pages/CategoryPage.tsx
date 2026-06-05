@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { fabrics } from "@/data/fabrics";
+import { type Fabric } from "@/data/fabrics";
+import { useFabrics } from "@/hooks/useFabrics";
 import { useLanguage } from "@/contexts/LanguageContext";
 import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
@@ -8,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
 
-const categoryConfig: Record<string, { ar: string; en: string; filter: (f: typeof fabrics[0]) => boolean }> = {
+const categoryConfig: Record<string, { ar: string; en: string; filter: (f: Fabric) => boolean }> = {
   upholstery: {
     ar: "أقمشة التنجيد",
     en: "Upholstery Fabrics",
@@ -60,6 +61,7 @@ const CategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { lang } = useLanguage();
   const config = slug ? categoryConfig[slug] : null;
+  const fabrics = useFabrics();
 
   const filtered = config ? fabrics.filter(config.filter) : [];
   const title = config ? config[lang === "ar" ? "ar" : "en"] : "";
