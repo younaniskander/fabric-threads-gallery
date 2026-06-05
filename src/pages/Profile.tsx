@@ -26,6 +26,7 @@ const Profile = () => {
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [myMessages, setMyMessages] = useState<any[]>([]);
   const [messageReplies, setMessageReplies] = useState<Record<string, any[]>>({});
+  const allFabrics = useFabrics();
 
   useEffect(() => {
     if (!authLoading && !user) {
