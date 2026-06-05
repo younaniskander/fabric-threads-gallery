@@ -18,6 +18,7 @@ import ContactSection from "@/components/ContactSection";
 
 const Index = () => {
   const { t } = useLanguage();
+  const fabrics = useFabrics();
   const featured = fabrics.filter((f) => f.isFeatured);
   const newArrivals = fabrics.filter((f) => f.isNew);
   const popular = fabrics.filter((f) => f.isPopular);
