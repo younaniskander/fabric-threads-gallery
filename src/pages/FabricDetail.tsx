@@ -15,7 +15,7 @@ import PaymentMethods from "@/components/PaymentMethods";
 
 
 const FabricDetail = () => {
-  const { id } = useParams();
+  const fabrics = useFabrics();
   const fabric = fabrics.find((f) => f.id === id);
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);
