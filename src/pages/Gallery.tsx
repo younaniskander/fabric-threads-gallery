@@ -31,7 +31,7 @@ const Gallery = () => {
       if (selectedOrigin && f.origin !== selectedOrigin) return false;
       return true;
     });
-  }, [search, selectedType, selectedCategory, selectedBrand, selectedOrigin]);
+  }, [fabrics, search, selectedType, selectedCategory, selectedBrand, selectedOrigin]);
 
   const clearFilters = () => {
     setSearch("");
