@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { fabrics } from "@/data/fabrics";
+import { useFabrics } from "@/hooks/useFabrics";
 import FabricCard from "@/components/FabricCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
