@@ -240,8 +240,9 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: "", name_en: "", type: "cotton", category: "upholstery", brand: "",
-    origin: "", composition: "", gsm: "", price: "اطلب السعر",
+    origin: "", composition: "", gsm: "",
     is_featured: false, is_new: false, is_popular: false, coming_soon: false,
+    has_offer: false, offer_text: "", in_all_branches: true,
     image_url: "",
   });
   const { toast } = useToast();
@@ -260,11 +261,13 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
       origin: form.origin.trim() || null,
       composition: form.composition.trim() || null,
       gsm: form.gsm ? parseInt(form.gsm) : null,
-      price: form.price || "اطلب السعر",
       is_featured: form.is_featured,
       is_new: form.is_new,
       is_popular: form.is_popular,
       coming_soon: form.coming_soon,
+      has_offer: form.has_offer,
+      offer_text: form.offer_text.trim() || null,
+      in_all_branches: form.in_all_branches,
       image_url: form.image_url || null,
     });
     if (error) {
@@ -272,10 +275,11 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
     } else {
       toast({ title: "تم بنجاح", description: "تم إضافة القماش" });
       setShowForm(false);
-      setForm({ name: "", name_en: "", type: "cotton", category: "upholstery", brand: "", origin: "", composition: "", gsm: "", price: "اطلب السعر", is_featured: false, is_new: false, is_popular: false, coming_soon: false, image_url: "" });
+      setForm({ name: "", name_en: "", type: "cotton", category: "upholstery", brand: "", origin: "", composition: "", gsm: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
       onRefresh();
     }
   };
+
 
   const handleDelete = async (id: string) => {
     await supabase.from("fabrics_db").delete().eq("id", id);
@@ -322,7 +326,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
             <div><Label className="font-body text-sm">بلد المنشأ</Label><Input value={form.origin} onChange={e => setForm({...form, origin: e.target.value})} className="font-body" /></div>
             <div><Label className="font-body text-sm">التركيب</Label><Input value={form.composition} onChange={e => setForm({...form, composition: e.target.value})} className="font-body" /></div>
             <div><Label className="font-body text-sm">GSM</Label><Input type="number" value={form.gsm} onChange={e => setForm({...form, gsm: e.target.value})} dir="ltr" /></div>
-            <div><Label className="font-body text-sm">السعر</Label><Input value={form.price} onChange={e => setForm({...form, price: e.target.value})} className="font-body" /></div>
+            <div><Label className="font-body text-sm">نص العرض / الخصم</Label><Input value={form.offer_text} onChange={e => setForm({...form, offer_text: e.target.value})} placeholder="مثال: خصم 20%" className="font-body" /></div>
             <div>
               <Label className="font-body text-sm">صورة المنتج</Label>
               <ImageUploader bucket="product-images" onUploaded={(url) => setForm({...form, image_url: url})} currentUrl={form.image_url || undefined} />
@@ -333,7 +337,10 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
             <label className="flex items-center gap-2 font-body text-sm"><Switch checked={form.is_new} onCheckedChange={v => setForm({...form, is_new: v})} /> جديد</label>
             <label className="flex items-center gap-2 font-body text-sm"><Switch checked={form.is_popular} onCheckedChange={v => setForm({...form, is_popular: v})} /> شائع</label>
             <label className="flex items-center gap-2 font-body text-sm"><Switch checked={form.coming_soon} onCheckedChange={v => setForm({...form, coming_soon: v})} /> قريباً</label>
+            <label className="flex items-center gap-2 font-body text-sm"><Switch checked={form.has_offer} onCheckedChange={v => setForm({...form, has_offer: v})} /> عليه عرض / خصم</label>
+            <label className="flex items-center gap-2 font-body text-sm"><Switch checked={form.in_all_branches} onCheckedChange={v => setForm({...form, in_all_branches: v})} /> متاح في كل الفروع</label>
           </div>
+
           <div className="flex gap-2">
             <Button onClick={handleAdd} className="gradient-teal text-primary-foreground font-body">حفظ</Button>
             <Button variant="outline" onClick={() => setShowForm(false)} className="font-body">إلغاء</Button>
