@@ -202,13 +202,14 @@ const FabricDetail = () => {
                     name: fabric.name,
                     nameEn: fabric.nameEn,
                     image: displayImage,
-                    price: fabric.priceNum,
-                    priceDisplay: fabric.price,
+                    price: fabric.priceNum ?? 0,
+                    priceDisplay: fabric.price ?? "",
                     color: currentVariant?.color,
                     colorName: currentVariant?.name,
                   }, quantity);
                   toast.success(lang === "ar" ? "تمت الإضافة للسلة" : "Added to cart");
                 }}
+
                 className="flex-1 bg-primary text-primary-foreground py-3 rounded-lg font-body font-semibold text-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
               >
                 <ShoppingBag size={18} />
