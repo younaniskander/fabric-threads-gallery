@@ -1,32 +1,15 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingBag, Heart } from "lucide-react";
+import { MapPin, Tag } from "lucide-react";
 import type { Fabric } from "@/data/fabrics";
-import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { toast } from "sonner";
 
 interface FabricCardProps {
   fabric: Fabric;
 }
 
 const FabricCard = ({ fabric }: FabricCardProps) => {
-  const { addItem } = useCart();
   const { lang } = useLanguage();
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addItem({
-      id: fabric.id,
-      name: fabric.name,
-      nameEn: fabric.nameEn,
-      image: fabric.image,
-      price: fabric.priceNum,
-      priceDisplay: fabric.price,
-    });
-    toast.success(lang === "ar" ? "تمت الإضافة للسلة" : "Added to cart");
-  };
 
   return (
     <Link to={`/fabric/${fabric.id}`}>
@@ -44,6 +27,12 @@ const FabricCard = ({ fabric }: FabricCardProps) => {
           />
           {/* Badges */}
           <div className="absolute top-3 right-3 flex flex-col gap-1">
+            {fabric.hasOffer && (
+              <span className="bg-destructive text-destructive-foreground text-xs px-2 py-1 rounded font-body font-semibold flex items-center gap-1">
+                <Tag size={10} />
+                {fabric.offerText || (lang === "ar" ? "عرض" : "Offer")}
+              </span>
+            )}
             {fabric.isFeatured && (
               <span className="bg-gold text-gold-foreground text-xs px-2 py-1 rounded font-body font-semibold">
                 {lang === "ar" ? "مميز" : "Featured"}
@@ -60,18 +49,11 @@ const FabricCard = ({ fabric }: FabricCardProps) => {
               </span>
             )}
           </div>
-          {/* Quick add button */}
+          {/* Category tag */}
           <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
             <span className="bg-background/80 backdrop-blur-sm text-foreground text-xs px-2 py-1 rounded font-body">
               {fabric.category === "upholstery" ? (lang === "ar" ? "تنجيد" : "Upholstery") : (lang === "ar" ? "ستائر" : "Curtains")}
             </span>
-            <button
-              onClick={handleAddToCart}
-              className="bg-primary text-primary-foreground p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-primary/90"
-              title={lang === "ar" ? "أضف للسلة" : "Add to Cart"}
-            >
-              <ShoppingBag size={14} />
-            </button>
           </div>
         </div>
 
@@ -79,7 +61,7 @@ const FabricCard = ({ fabric }: FabricCardProps) => {
         <div className="p-4">
           <h3 className="font-display text-lg text-foreground mb-1">{fabric.name}</h3>
           <p className="text-xs text-muted-foreground font-body mb-2">{fabric.brand} • {fabric.origin}</p>
-          <div className="flex items-center gap-1.5 mb-2">
+          <div className="flex items-center gap-1.5 mb-3">
             {fabric.colorVariants?.slice(0, 5).map((variant, i) => (
               <span
                 key={i}
@@ -89,15 +71,12 @@ const FabricCard = ({ fabric }: FabricCardProps) => {
               />
             ))}
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-primary font-body">{fabric.price}</span>
-            <button
-              onClick={handleAddToCart}
-              className="text-xs bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-body font-medium hover:bg-primary/90 transition-colors"
-            >
-              {lang === "ar" ? "أضف للسلة" : "Add to Cart"}
-            </button>
-          </div>
+          {fabric.inAllBranches && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-body">
+              <MapPin size={12} className="text-primary" />
+              {lang === "ar" ? "متاح في كل الفروع" : "Available in all branches"}
+            </div>
+          )}
         </div>
       </motion.div>
     </Link>
@@ -105,3 +84,4 @@ const FabricCard = ({ fabric }: FabricCardProps) => {
 };
 
 export default FabricCard;
+
