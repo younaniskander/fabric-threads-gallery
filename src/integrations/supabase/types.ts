@@ -66,13 +66,16 @@ export type Database = {
           created_at: string
           features: string[] | null
           gsm: number | null
+          has_offer: boolean
           id: string
           image_url: string | null
+          in_all_branches: boolean
           is_featured: boolean | null
           is_new: boolean | null
           is_popular: boolean | null
           name: string
           name_en: string | null
+          offer_text: string | null
           origin: string | null
           price: string | null
           type: string
@@ -88,13 +91,16 @@ export type Database = {
           created_at?: string
           features?: string[] | null
           gsm?: number | null
+          has_offer?: boolean
           id?: string
           image_url?: string | null
+          in_all_branches?: boolean
           is_featured?: boolean | null
           is_new?: boolean | null
           is_popular?: boolean | null
           name: string
           name_en?: string | null
+          offer_text?: string | null
           origin?: string | null
           price?: string | null
           type: string
@@ -110,13 +116,16 @@ export type Database = {
           created_at?: string
           features?: string[] | null
           gsm?: number | null
+          has_offer?: boolean
           id?: string
           image_url?: string | null
+          in_all_branches?: boolean
           is_featured?: boolean | null
           is_new?: boolean | null
           is_popular?: boolean | null
           name?: string
           name_en?: string | null
+          offer_text?: string | null
           origin?: string | null
           price?: string | null
           type?: string
