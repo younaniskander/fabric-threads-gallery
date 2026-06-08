@@ -83,14 +83,25 @@ const FabricDetail = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="flex items-start gap-3 mb-4">
+            <div className="flex items-start gap-2 mb-4 flex-wrap">
+              {fabric.hasOffer && (
+                <span className="bg-destructive text-destructive-foreground text-xs px-3 py-1 rounded-full font-body font-semibold">
+                  {fabric.offerText || (lang === "ar" ? "عرض خاص" : "Special Offer")}
+                </span>
+              )}
               {fabric.isFeatured && (
                 <span className="bg-gold text-gold-foreground text-xs px-3 py-1 rounded-full font-body font-semibold">مميز</span>
               )}
               {fabric.isNew && (
                 <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded-full font-body font-semibold">جديد</span>
               )}
+              {fabric.inAllBranches && (
+                <span className="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-body font-semibold">
+                  {lang === "ar" ? "متاح في كل الفروع" : "In all branches"}
+                </span>
+              )}
             </div>
+
 
             <h1 className="font-display text-3xl md:text-4xl text-foreground mb-2">{fabric.name}</h1>
             <p className="text-muted-foreground font-body text-sm mb-6">{fabric.nameEn}</p>
@@ -178,10 +189,8 @@ const FabricDetail = () => {
               </div>
             </div>
 
-            {/* Price display */}
-            <div className="mb-6">
-              <span className="font-display text-2xl text-primary">{fabric.price}</span>
-            </div>
+            {/* Price removed — products are display-only */}
+
 
             {/* CTA */}
             <div className="flex gap-3">
