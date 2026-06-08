@@ -19,14 +19,16 @@ function mapRow(row: any): Fabric {
     composition: row.composition || "",
     features: row.features || [],
     usage: row.usage_suggestions || [],
-    price: row.price || "اطلب السعر",
-    priceNum: 0,
     isFeatured: !!row.is_featured,
     isNew: !!row.is_new,
     isPopular: !!row.is_popular,
     comingSoon: !!row.coming_soon,
+    hasOffer: !!row.has_offer,
+    offerText: row.offer_text || "",
+    inAllBranches: row.in_all_branches !== false,
   };
 }
+
 
 export function useFabrics(): Fabric[] {
   const [dbFabrics, setDbFabrics] = useState<Fabric[]>([]);
