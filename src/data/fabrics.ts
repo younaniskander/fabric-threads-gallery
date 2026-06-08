@@ -27,13 +27,17 @@ export interface Fabric {
   composition: string;
   features: string[];
   usage: string[];
-  price: string;
-  priceNum: number; // numeric price in EGP
+  price?: string;
+  priceNum?: number;
   isFeatured?: boolean;
   isNew?: boolean;
   isPopular?: boolean;
   comingSoon?: boolean;
+  hasOffer?: boolean;
+  offerText?: string;
+  inAllBranches?: boolean;
 }
+
 
 export const fabricTypes = [
   { id: "cotton", name: "قطن", nameEn: "Cotton" },
