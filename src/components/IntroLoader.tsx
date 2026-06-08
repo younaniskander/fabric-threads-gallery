@@ -1,57 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoLight from "@/assets/adam-logo-light.svg";
-import logoDark from "@/assets/adam-logo-dark.svg";
-import { useTheme } from "@/contexts/ThemeContext";
 
 interface IntroLoaderProps {
   onComplete: () => void;
 }
 
 const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
-  const { theme } = useTheme();
-  const [phase, setPhase] = useState<"video" | "fadeout">("video");
+  const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPhase("fadeout");
-      setTimeout(onComplete, 800);
-    }, 3500);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
+  const finish = () => {
+    setVisible(false);
+    setTimeout(onComplete, 600);
+  };
 
   return (
     <AnimatePresence>
-      {phase !== "fadeout" ? null : null}
-      <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-background"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: phase === "fadeout" ? 0 : 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="relative w-full h-full flex items-center justify-center">
+      {visible && (
+        <motion.div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-background"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <video
             autoPlay
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-            onEnded={() => {
-              setPhase("fadeout");
-              setTimeout(onComplete, 800);
-            }}
+            className="w-full h-full object-cover"
+            onEnded={finish}
+            onError={finish}
           >
             <source src="/intro.mp4" type="video/mp4" />
           </video>
-          <motion.div
-            className="relative z-10"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
+          <button
+            onClick={finish}
+            className="absolute bottom-6 right-6 rounded-full bg-background/70 px-4 py-2 text-xs font-body text-foreground backdrop-blur hover:bg-background"
           >
-            <img src={theme === "dark" ? logoDark : logoLight} alt="ADAM Fabrics" className="w-40 h-40 shadow-fabric opacity-80" />
-          </motion.div>
-        </div>
-      </motion.div>
+            Skip
+          </button>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };
