@@ -28,10 +28,13 @@ const Index = () => {
   const popular = fabrics.filter((f) => f.isPopular);
 
   const [showIntro, setShowIntro] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!sessionStorage.getItem("adam_intro_seen")) {
       setShowIntro(true);
+    } else {
+      setIntroDone(true);
     }
   }, []);
 
@@ -42,10 +45,12 @@ const Index = () => {
           onComplete={() => {
             sessionStorage.setItem("adam_intro_seen", "1");
             setShowIntro(false);
+            setIntroDone(true);
           }}
         />
       )}
-      <OfferPopup />
+      {introDone && <OfferPopup />}
+
       <Navbar />
       <HeroSlider />
 
