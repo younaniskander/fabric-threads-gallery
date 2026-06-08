@@ -8,8 +8,8 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import GlassThemeToggle from "@/components/GlassThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
-import adamLogoLight from "@/assets/adam-logo-light.svg";
-import adamLogoDark from "@/assets/adam-logo-dark.svg";
+import adamLogoLight from "@/assets/adam-logo-new.png";
+import adamLogoDark from "@/assets/adam-logo-new.png";
 
 const platformLabels: Record<string, Record<string, string>> = {
   facebook: { ar: "فيسبوك", en: "Facebook" },

@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import logo from "@/assets/adam-logo-light.svg";
+import logo from "@/assets/adam-logo-new.png";
 
 type Tab = "stats" | "fabrics" | "customers" | "brands" | "messages" | "social";
 
