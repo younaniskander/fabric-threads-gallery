@@ -49,18 +49,25 @@ const CartDrawer = () => {
     setLoading(true);
     try {
       await saveOrderToDb();
-      const { data, error } = await supabase.functions.invoke("create-checkout", {
-        body: {
-          items: items.map((i) => ({
-            id: i.id,
-            quantity: i.quantity,
-          })),
-          currency: "egp",
-        },
-      });
-      if (error) throw error;
-      if (data?.url) {
-        window.open(data.url, "_blank");
+
+      // If all items are free (price === 0), skip Stripe and go straight to success
+      if (totalPrice === 0) {
+        clearCart();
+        window.location.href = "/payment-success";
+      } else {
+        const { data, error } = await supabase.functions.invoke("create-checkout", {
+          body: {
+            items: items.map((i) => ({
+              id: i.id,
+              quantity: i.quantity,
+            })),
+            currency: "egp",
+          },
+        });
+        if (error) throw error;
+        if (data?.url) {
+          window.open(data.url, "_blank");
+        }
       }
     } catch (err: any) {
       console.error(err);
