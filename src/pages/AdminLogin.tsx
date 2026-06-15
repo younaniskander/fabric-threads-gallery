@@ -11,15 +11,11 @@ import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new.png";
 import { useTheme } from "@/contexts/ThemeContext";
 
-const FIRST_ADMIN_EMAIL = "admin@adamfabrics.com";
-const FIRST_ADMIN_PASSWORD = "AdamAdmin#2026";
-
 const AdminLogin = () => {
   const { theme } = useTheme();
-  const [email, setEmail] = useState(FIRST_ADMIN_EMAIL);
-  const [password, setPassword] = useState(FIRST_ADMIN_PASSWORD);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [creatingAdmin, setCreatingAdmin] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
