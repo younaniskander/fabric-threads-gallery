@@ -27,7 +27,7 @@ const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
             autoPlay
             muted
             playsInline
-            className="max-w-full max-h-full w-auto h-auto object-contain"
+            className="h-auto w-full max-h-[100svh] object-contain md:h-full md:w-auto md:max-w-full"
             onEnded={finish}
             onError={finish}
           >
