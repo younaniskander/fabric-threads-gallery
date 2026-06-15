@@ -234,8 +234,8 @@ const Navbar = () => {
             </Link>
 
             {/* Cart */}
-            <button onClick={() => setCartOpen(true)} className="relative p-2 text-muted-foreground transition-colors hover:text-primary" aria-label={t("nav.cart")}>
-              <ShoppingBag size={20} />
+            <button onClick={() => setCartOpen(true)} className="relative p-1.5 md:p-2 text-muted-foreground transition-colors hover:text-primary" aria-label={t("nav.cart")}>
+              <ShoppingBag size={18} />
               {totalItems > 0 && (
                 <span className="absolute -top-0.5 -end-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
                   {totalItems}
@@ -244,8 +244,8 @@ const Navbar = () => {
             </button>
 
             {/* Mobile menu */}
-            <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-foreground md:hidden" aria-label="Menu">
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            <button onClick={() => setIsOpen(!isOpen)} className="p-1.5 md:p-2 text-foreground md:hidden" aria-label="Menu">
+              {isOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
