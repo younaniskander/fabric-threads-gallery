@@ -79,7 +79,8 @@ serve(async (req) => {
       supabaseUrl,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? anonKey,
     );
-    const ids = [...new Set(items.map((i) => i.id))];
+    // Strip "sample-" prefix from free-sample cart items so we get valid UUIDs
+    const ids = [...new Set(items.map((i) => i.id.replace(/^sample-/, "")))];
     const { data: fabrics, error: fabricsErr } = await serviceClient
       .from("fabrics_db")
       .select("id, name, name_en, image_url")
@@ -106,7 +107,8 @@ serve(async (req) => {
     // fully discounted by the 100% coupon. If/when paid SKUs are introduced,
     // store a numeric price column and read unit_amount from it here.
     const lineItems = items.map((item) => {
-      const f: any = fabricsById.get(item.id);
+      const realId = item.id.replace(/^sample-/, "");
+      const f: any = fabricsById.get(realId);
       const name = f.name || f.name_en || "Fabric sample";
       const image = f.image_url && /^https?:\/\//.test(f.image_url) ? [f.image_url] : undefined;
       return {
