@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles } from "lucide-react";
+import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import offerFabric from "@/assets/offer-fabric.jpg";
 
 const STORAGE_KEY = "adam_offer_popup_seen";
 
@@ -58,18 +59,24 @@ const OfferPopup = () => {
                 <X size={18} />
               </button>
 
-              <div className="bg-gradient-to-br from-primary/20 via-background to-accent/20 px-6 pt-10 pb-6 text-center">
-                <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Sparkles size={24} />
+              <div className="relative h-56 w-full overflow-hidden sm:h-64">
+                <img
+                  src={offerFabric}
+                  alt={lang === "ar" ? "قماش فاخر" : "Premium fabric"}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 px-6 pb-4 text-center">
+                  <h2 className="font-display text-2xl text-foreground drop-shadow-md">
+                    {lang === "ar" ? "عرض خاص لزوارنا الجدد" : "Special Offer for New Visitors"}
+                  </h2>
+                  <p className="mt-1 font-body text-sm text-foreground/90 drop-shadow">
+                    {lang === "ar"
+                      ? "خصومات حصرية على تشكيلتنا المختارة من الأقمشة الفاخرة"
+                      : "Exclusive discounts on our curated selection of premium fabrics"}
+                  </p>
                 </div>
-                <h2 className="font-display text-2xl text-foreground">
-                  {lang === "ar" ? "عرض خاص لزوارنا الجدد" : "Special Offer for New Visitors"}
-                </h2>
-                <p className="mt-2 font-body text-sm text-muted-foreground">
-                  {lang === "ar"
-                    ? "خصومات حصرية على تشكيلتنا المختارة من الأقمشة الفاخرة"
-                    : "Exclusive discounts on our curated selection of premium fabrics"}
-                </p>
               </div>
 
               <div className="px-6 py-5">
