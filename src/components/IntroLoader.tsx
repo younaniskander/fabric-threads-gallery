@@ -17,7 +17,7 @@ const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-background"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black"
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -27,7 +27,7 @@ const IntroLoader = ({ onComplete }: IntroLoaderProps) => {
             autoPlay
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="max-w-full max-h-full w-auto h-auto object-contain"
             onEnded={finish}
             onError={finish}
           >
