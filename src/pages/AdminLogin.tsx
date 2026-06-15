@@ -31,11 +31,14 @@ const AdminLogin = () => {
       return;
     }
 
-    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id).eq("role", "admin");
+    const { data: isAdmin, error: roleError } = await supabase.rpc("has_role", {
+      _user_id: data.user.id,
+      _role: "admin",
+    });
 
     setLoading(false);
 
-    if (roles && roles.length > 0) {
+    if (!roleError && isAdmin === true) {
       navigate("/admin");
     } else {
       await supabase.auth.signOut();
