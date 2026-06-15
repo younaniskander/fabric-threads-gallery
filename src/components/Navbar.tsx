@@ -94,37 +94,39 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-md">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between md:h-20">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="flex h-14 items-center justify-between md:h-20">
           {/* Left: Logo + actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5 md:gap-4">
             <Link to="/" className="flex items-center shrink-0">
-              <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-14 md:h-16 w-auto object-contain" />
+              <img src={theme === "dark" ? adamLogoDark : adamLogoLight} alt="ADAM Fabrics" className="h-9 md:h-16 w-auto object-contain" />
             </Link>
 
-            <GlassThemeToggle />
+            <div className="hidden sm:block">
+              <GlassThemeToggle />
+            </div>
 
             {/* Language toggle */}
             <button
               onClick={() => setLang(lang === "ar" ? "en" : "ar")}
-              className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-xs font-body text-muted-foreground transition-colors hover:text-primary hover:border-primary"
+              className="flex items-center gap-1 rounded-md border border-border px-1.5 py-1 md:px-2.5 md:py-1.5 text-[10px] md:text-xs font-body text-muted-foreground transition-colors hover:text-primary hover:border-primary"
             >
-              <Globe size={14} />
+              <Globe size={12} />
               {lang === "ar" ? "EN" : "عربي"}
             </button>
 
             {/* Search */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 text-muted-foreground transition-colors hover:text-primary"
+              className="p-1.5 md:p-2 text-muted-foreground transition-colors hover:text-primary"
               aria-label={t("nav.search")}
             >
-              <Search size={20} />
+              <Search size={18} />
             </button>
           </div>
 
           {/* Right nav + actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-0.5 md:gap-3">
             {/* Desktop nav */}
             <div className="hidden items-center gap-6 font-body text-sm md:flex">
               {navItems.map((item) => (
