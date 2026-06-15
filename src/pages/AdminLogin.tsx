@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Lock, Mail, ShieldPlus } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,15 +11,11 @@ import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new.png";
 import { useTheme } from "@/contexts/ThemeContext";
 
-const FIRST_ADMIN_EMAIL = "admin@adamfabrics.com";
-const FIRST_ADMIN_PASSWORD = "AdamAdmin#2026";
-
 const AdminLogin = () => {
   const { theme } = useTheme();
-  const [email, setEmail] = useState(FIRST_ADMIN_EMAIL);
-  const [password, setPassword] = useState(FIRST_ADMIN_PASSWORD);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [creatingAdmin, setCreatingAdmin] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -47,26 +43,6 @@ const AdminLogin = () => {
     }
   };
 
-  const handleBootstrapAdmin = async () => {
-    setCreatingAdmin(true);
-    const { error } = await supabase.functions.invoke("bootstrap-first-admin", {
-      body: {
-        email: FIRST_ADMIN_EMAIL,
-        password: FIRST_ADMIN_PASSWORD,
-      },
-    });
-    setCreatingAdmin(false);
-
-    if (error) {
-      toast({ title: "تعذر إنشاء المشرف", description: "قد يكون تم إنشاء المشرف الأول بالفعل", variant: "destructive" });
-      return;
-    }
-
-    toast({ title: "تم إنشاء أول مشرف", description: "يمكنك الآن تسجيل الدخول بالبيانات الجاهزة" });
-    setEmail(FIRST_ADMIN_EMAIL);
-    setPassword(FIRST_ADMIN_PASSWORD);
-  };
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <motion.div
@@ -80,15 +56,6 @@ const AdminLogin = () => {
           <p className="mt-1 font-body text-sm text-muted-foreground">تسجيل دخول المشرف</p>
         </div>
 
-        <div className="mb-5 rounded-xl border border-border bg-muted/60 p-4 text-right">
-          <p className="font-body text-xs leading-6 text-muted-foreground">
-            في حال عدم وجود مشرف بعد، اضغط الزر التالي لإنشاء أول مشرف تلقائياً.
-          </p>
-          <Button type="button" onClick={handleBootstrapAdmin} disabled={creatingAdmin} variant="outline" className="mt-3 w-full gap-2 font-body">
-            <ShieldPlus size={16} />
-            {creatingAdmin ? "جاري إنشاء المشرف الأول..." : "إنشاء أول مشرف"}
-          </Button>
-        </div>
 
         <form onSubmit={handleLogin} className="space-y-5">
           <div className="space-y-2">

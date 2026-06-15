@@ -52,10 +52,8 @@ const CartDrawer = () => {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: {
           items: items.map((i) => ({
-            name: lang === "ar" ? i.name : i.nameEn,
-            price: i.price,
+            id: i.id,
             quantity: i.quantity,
-            image: i.image,
           })),
           currency: "egp",
         },
