@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import GlassThemeToggle from "@/components/GlassThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
 import adamLogoLight from "@/assets/adam-logo-new.png";
-import adamLogoDark from "@/assets/adam-logo-new.png";
+import adamLogoDark from "@/assets/adam-logo-new-white.png";
 
 const platformLabels: Record<string, Record<string, string>> = {
   facebook: { ar: "فيسبوك", en: "Facebook" },
