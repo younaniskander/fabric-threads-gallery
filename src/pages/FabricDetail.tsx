@@ -238,6 +238,9 @@ const FabricDetail = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Reviews */}
+        <ReviewsSection fabricId={fabric.id} />
       </div>
 
       <Footer />
