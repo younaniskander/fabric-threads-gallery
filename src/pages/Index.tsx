@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -15,7 +14,6 @@ import SectionHeader from "@/components/SectionHeader";
 import UpholsteryIntro from "@/components/UpholsteryIntro";
 import StickyScrollFabrics from "@/components/StickyScrollFabrics";
 import ContactSection from "@/components/ContactSection";
-import IntroLoader from "@/components/IntroLoader";
 import OfferPopup from "@/components/OfferPopup";
 
 
@@ -26,29 +24,9 @@ const Index = () => {
   const newArrivals = fabrics.filter((f) => f.isNew);
   const popular = fabrics.filter((f) => f.isPopular);
 
-  const [showIntro, setShowIntro] = useState(false);
-  const [introDone, setIntroDone] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!sessionStorage.getItem("adam_intro_seen")) {
-      setShowIntro(true);
-    } else {
-      setIntroDone(true);
-    }
-  }, []);
-
   return (
     <div className="min-h-screen bg-background">
-      {showIntro && (
-        <IntroLoader
-          onComplete={() => {
-            sessionStorage.setItem("adam_intro_seen", "1");
-            setShowIntro(false);
-            setIntroDone(true);
-          }}
-        />
-      )}
-      {introDone && <OfferPopup />}
+      <OfferPopup />
 
       <Navbar />
       <HeroSlider />
