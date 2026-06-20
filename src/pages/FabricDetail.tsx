@@ -11,7 +11,6 @@ import Footer from "@/components/Footer";
 import FloatingChat from "@/components/FloatingChat";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
 import { toast } from "sonner";
-import PaymentMethods from "@/components/PaymentMethods";
 
 
 const FabricDetail = () => {
@@ -225,9 +224,6 @@ const FabricDetail = () => {
                 {lang === "ar" ? "تواصل عبر واتساب" : "Contact via WhatsApp"}
               </a>
             </div>
-
-            {/* Payment Methods */}
-            <PaymentMethods />
 
             {/* Mascot tip */}
             <div className="mt-6 bg-muted rounded-xl p-4 flex items-center gap-4 flex-row-reverse">
