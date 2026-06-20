@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
+import ReviewsSection from "@/components/ReviewsSection";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { toast } from "sonner";
 
@@ -237,6 +238,9 @@ const FabricDetail = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Reviews */}
+        <ReviewsSection fabricId={fabric.id} />
       </div>
 
       <Footer />

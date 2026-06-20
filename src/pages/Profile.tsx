@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare } from "lucide-react";
+import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-type Tab = "profile" | "orders" | "inbox" | "wishlist";
+type Tab = "profile" | "orders" | "loyalty" | "inbox" | "wishlist";
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -23,6 +23,8 @@ const Profile = () => {
   const [profile, setProfile] = useState<{ full_name: string; phone: string }>({ full_name: "", phone: "" });
   const [editing, setEditing] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
+  const [points, setPoints] = useState(0);
+  const [loyaltyTx, setLoyaltyTx] = useState<any[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [myMessages, setMyMessages] = useState<any[]>([]);
   const [messageReplies, setMessageReplies] = useState<Record<string, any[]>>({});
@@ -37,8 +39,15 @@ const Profile = () => {
   useEffect(() => {
     if (!user) return;
     // Load profile
-    supabase.from("profiles").select("full_name, phone").eq("id", user.id).maybeSingle().then(({ data }) => {
-      if (data) setProfile({ full_name: data.full_name || "", phone: data.phone || "" });
+    supabase.from("profiles").select("full_name, phone, loyalty_points").eq("id", user.id).maybeSingle().then(({ data }) => {
+      if (data) {
+        setProfile({ full_name: data.full_name || "", phone: data.phone || "" });
+        setPoints((data as any).loyalty_points || 0);
+      }
+    });
+    // Load loyalty transactions
+    supabase.from("loyalty_transactions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => {
+      if (data) setLoyaltyTx(data);
     });
     // Load orders
     supabase.from("orders").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => {
@@ -85,6 +94,7 @@ const Profile = () => {
   const tabs: { id: Tab; label: string; icon: any }[] = [
     { id: "profile", label: lang === "ar" ? "الملف الشخصي" : "Profile", icon: UserIcon },
     { id: "orders", label: lang === "ar" ? "طلباتي" : "My Orders", icon: Package },
+    { id: "loyalty", label: lang === "ar" ? "نقاطي" : "My Points", icon: Gift },
     { id: "inbox", label: lang === "ar" ? "الرسائل" : "Inbox", icon: Inbox },
     { id: "wishlist", label: lang === "ar" ? "المفضلة" : "Wishlist", icon: Heart },
   ];
@@ -170,9 +180,17 @@ const Profile = () => {
                             {new Date(order.created_at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}
                           </span>
                           <span className={`text-xs px-2 py-1 rounded-full font-body ${
-                            order.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                            order.status === "delivered" || order.status === "completed"
+                              ? "bg-green-100 text-green-700"
+                              : order.status === "cancelled"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-yellow-100 text-yellow-700"
                           }`}>
-                            {order.status === "completed" ? (lang === "ar" ? "مكتمل" : "Completed") : (lang === "ar" ? "قيد المعالجة" : "Pending")}
+                            {order.status === "delivered" || order.status === "completed"
+                              ? (lang === "ar" ? "تم التسليم" : "Delivered")
+                              : order.status === "cancelled"
+                              ? (lang === "ar" ? "ملغي" : "Cancelled")
+                              : (lang === "ar" ? "قيد المعالجة" : "Pending")}
                           </span>
                         </div>
                         <p className="text-sm font-body text-foreground">
@@ -180,6 +198,39 @@ const Profile = () => {
                         </p>
                       </div>
                     ))
+                  )}
+                </div>
+              )}
+
+              {tab === "loyalty" && (
+                <div className="space-y-4">
+                  <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "نقاط الولاء" : "Loyalty Points"}</h2>
+                  <div className="bg-gradient-to-br from-primary/15 to-accent/10 border border-border rounded-xl p-6 flex items-center gap-4">
+                    <Gift size={36} className="text-primary" />
+                    <div>
+                      <div className="font-display text-4xl text-foreground">{points}</div>
+                      <div className="font-body text-sm text-muted-foreground">{lang === "ar" ? "نقطة متاحة" : "available points"}</div>
+                    </div>
+                  </div>
+                  {loyaltyTx.length === 0 ? (
+                    <div className="bg-card border border-border rounded-xl p-10 text-center">
+                      <Gift size={40} className="mx-auto text-muted-foreground mb-3" />
+                      <p className="text-muted-foreground font-body">{lang === "ar" ? "لا توجد حركات نقاط بعد" : "No points activity yet"}</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {loyaltyTx.map((t) => (
+                        <div key={t.id} className="bg-card border border-border rounded-xl p-4 flex items-center justify-between">
+                          <div>
+                            <p className="font-body text-sm text-foreground">{t.reason || (t.type === "redeem" ? (lang === "ar" ? "استبدال نقاط" : "Points redeemed") : (lang === "ar" ? "نقاط مكتسبة" : "Points earned"))}</p>
+                            <span className="font-body text-xs text-muted-foreground">{new Date(t.created_at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}</span>
+                          </div>
+                          <span className={`font-body font-semibold text-sm ${t.points >= 0 ? "text-green-600" : "text-destructive"}`} dir="ltr">
+                            {t.points >= 0 ? "+" : ""}{t.points}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
               )}

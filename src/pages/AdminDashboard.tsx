@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
   Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
-  ShoppingCart, Percent
+  ShoppingCart, Percent, Gift, Search
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,9 @@ import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/adam-logo-new.png";
 import OrdersSection from "@/components/admin/OrdersSection";
 import CouponsSection from "@/components/admin/CouponsSection";
+import LoyaltySection from "@/components/admin/LoyaltySection";
 
-type Tab = "stats" | "fabrics" | "orders" | "customers" | "coupons" | "brands" | "messages" | "social";
+type Tab = "stats" | "fabrics" | "orders" | "customers" | "loyalty" | "coupons" | "brands" | "messages" | "social";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -87,6 +88,7 @@ const AdminDashboard = () => {
     { id: "orders", label: "الطلبات", icon: ShoppingCart },
     { id: "fabrics", label: "الأقمشة", icon: Package, count: fabrics.length },
     { id: "customers", label: "العملاء", icon: Users, count: customers.length },
+    { id: "loyalty", label: "نقاط الولاء", icon: Gift },
     { id: "coupons", label: "العروض والخصومات", icon: Percent },
     { id: "brands", label: "الماركات", icon: Tag, count: brands.length },
     { id: "messages", label: "الرسائل", icon: MessageSquare, count: messages.filter(m => !m.is_read).length },
@@ -133,6 +135,7 @@ const AdminDashboard = () => {
             {tab === "orders" && <OrdersSection />}
             {tab === "fabrics" && <FabricsTab fabrics={fabrics} brands={brands} onRefresh={fetchAll} />}
             {tab === "customers" && <CustomersTab customers={customers} onRefresh={fetchAll} />}
+            {tab === "loyalty" && <LoyaltySection />}
             {tab === "coupons" && <CouponsSection />}
             {tab === "brands" && <BrandsTab brands={brands} onRefresh={fetchAll} />}
             {tab === "messages" && <MessagesTab messages={messages} onRefresh={fetchAll} />}
@@ -412,6 +415,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
 const CustomersTab = ({ customers, onRefresh }: { customers: any[]; onRefresh: () => void }) => {
   const { toast } = useToast();
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const handleImageUpload = async (customerId: string, url: string) => {
     setUploadingId(customerId);
@@ -425,9 +429,21 @@ const CustomersTab = ({ customers, onRefresh }: { customers: any[]; onRefresh: (
     setUploadingId(null);
   };
 
+  const filtered = customers.filter((c: any) => {
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    return (c.name || "").toLowerCase().includes(q) || (c.phone || "").includes(q);
+  });
+
   return (
     <div className="space-y-4">
-      <h2 className="font-display text-xl text-foreground">العملاء المسجلين ({customers.length})</h2>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <h2 className="font-display text-xl text-foreground">العملاء المسجلين ({customers.length})</h2>
+        <div className="relative max-w-xs w-full">
+          <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="ابحث بالاسم أو الهاتف" className="pr-9 font-body" />
+        </div>
+      </div>
       <div className="bg-card rounded-xl shadow-fabric overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm font-body">
@@ -441,7 +457,7 @@ const CustomersTab = ({ customers, onRefresh }: { customers: any[]; onRefresh: (
               </tr>
             </thead>
             <tbody>
-              {customers.map((c: any, i: number) => (
+              {filtered.map((c: any, i: number) => (
                 <tr key={c.id} className="border-t border-border hover:bg-muted/50">
                   <td className="px-4 py-3">{i + 1}</td>
                   <td className="px-4 py-3">
@@ -459,7 +475,7 @@ const CustomersTab = ({ customers, onRefresh }: { customers: any[]; onRefresh: (
                   <td className="px-4 py-3 text-muted-foreground">{new Date(c.created_at).toLocaleDateString("ar-EG")}</td>
                 </tr>
               ))}
-              {customers.length === 0 && (
+              {filtered.length === 0 && (
                 <tr><td colSpan={5} className="text-center py-8 text-muted-foreground">لا يوجد عملاء مسجلين بعد</td></tr>
               )}
             </tbody>

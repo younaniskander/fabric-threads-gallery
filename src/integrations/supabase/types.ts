@@ -176,6 +176,33 @@ export type Database = {
         }
         Relationships: []
       }
+      loyalty_transactions: {
+        Row: {
+          created_at: string
+          id: string
+          points: number
+          reason: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points: number
+          reason?: string | null
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points?: number
+          reason?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       message_replies: {
         Row: {
           created_at: string
@@ -298,6 +325,7 @@ export type Database = {
           created_at: string
           full_name: string
           id: string
+          loyalty_points: number
           phone: string | null
           updated_at: string
         }
@@ -306,6 +334,7 @@ export type Database = {
           created_at?: string
           full_name?: string
           id: string
+          loyalty_points?: number
           phone?: string | null
           updated_at?: string
         }
@@ -314,10 +343,52 @@ export type Database = {
           created_at?: string
           full_name?: string
           id?: string
+          loyalty_points?: number
           phone?: string | null
           updated_at?: string
         }
         Relationships: []
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          fabric_id: string
+          id: string
+          rating: number
+          updated_at: string
+          user_id: string
+          user_name: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          fabric_id: string
+          id?: string
+          rating: number
+          updated_at?: string
+          user_id: string
+          user_name?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          fabric_id?: string
+          id?: string
+          rating?: number
+          updated_at?: string
+          user_id?: string
+          user_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_fabric_id_fkey"
+            columns: ["fabric_id"]
+            isOneToOne: false
+            referencedRelation: "fabrics_db"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       shipping_settings: {
         Row: {
