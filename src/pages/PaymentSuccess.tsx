@@ -20,12 +20,12 @@ const PaymentSuccess = () => {
       <div className="container mx-auto px-4 py-20 text-center">
         <CheckCircle className="mx-auto text-primary mb-6" size={64} />
         <h1 className="font-display text-3xl text-foreground mb-4">
-          {lang === "ar" ? "تم الدفع بنجاح!" : "Payment Successful!"}
+          {lang === "ar" ? "تم استلام طلبك بنجاح!" : "Order Received!"}
         </h1>
         <p className="text-muted-foreground font-body mb-8">
           {lang === "ar"
-            ? "شكراً لك! سيتم التواصل معك قريباً لتأكيد طلبك."
-            : "Thank you! We'll contact you soon to confirm your order."}
+            ? "شكراً لك! سيتم التواصل معك قريباً لتأكيد طلبك وترتيب التوصيل. الدفع عند الاستلام."
+            : "Thank you! We'll contact you soon to confirm and arrange delivery. Cash on delivery."}
         </p>
         <Link
           to="/"
