@@ -421,7 +421,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      redeem_coupon: { Args: { _code: string }; Returns: undefined }
       validate_coupon: {
         Args: { _code: string; _subtotal: number }
         Returns: {
