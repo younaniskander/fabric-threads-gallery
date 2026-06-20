@@ -7,7 +7,6 @@ import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FloatingChat from "@/components/FloatingChat";
 
 const categoryConfig: Record<string, { ar: string; en: string; filter: (f: Fabric) => boolean }> = {
   upholstery: {
@@ -104,7 +103,6 @@ const CategoryPage = () => {
         )}
       </div>
       <Footer />
-      <FloatingChat />
     </div>
   );
 };

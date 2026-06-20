@@ -8,7 +8,6 @@ import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FloatingChat from "@/components/FloatingChat";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
 import { toast } from "sonner";
 
@@ -236,7 +235,6 @@ const FabricDetail = () => {
       </div>
 
       <Footer />
-      <FloatingChat />
 
       {fabric && showSamplePopup && (
         <FreeSamplePopup

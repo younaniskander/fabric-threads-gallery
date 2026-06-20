@@ -8,7 +8,6 @@ import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FloatingChat from "@/components/FloatingChat";
 
 const Gallery = () => {
   const [searchParams] = useSearchParams();
@@ -127,7 +126,6 @@ const Gallery = () => {
       </div>
 
       <Footer />
-      <FloatingChat />
     </div>
   );
 };
