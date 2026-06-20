@@ -206,10 +206,6 @@ const Profile = () => {
                 <div className="space-y-4">
                   <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "الرسائل والردود" : "Messages & Replies"}</h2>
                   {myMessages.length === 0 ? (
-                    <></>
-                  ) : null}
-                  {false ? null : null}
-                  {myMessages.length === 0 ? (
                     <div className="bg-card border border-border rounded-xl p-10 text-center">
                       <MessageSquare size={40} className="mx-auto text-muted-foreground mb-3" />
                       <p className="text-muted-foreground font-body">{lang === "ar" ? "لا توجد رسائل بعد" : "No messages yet"}</p>
