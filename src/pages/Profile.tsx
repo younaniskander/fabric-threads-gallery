@@ -94,6 +94,7 @@ const Profile = () => {
   const tabs: { id: Tab; label: string; icon: any }[] = [
     { id: "profile", label: lang === "ar" ? "الملف الشخصي" : "Profile", icon: UserIcon },
     { id: "orders", label: lang === "ar" ? "طلباتي" : "My Orders", icon: Package },
+    { id: "loyalty", label: lang === "ar" ? "نقاطي" : "My Points", icon: Gift },
     { id: "inbox", label: lang === "ar" ? "الرسائل" : "Inbox", icon: Inbox },
     { id: "wishlist", label: lang === "ar" ? "المفضلة" : "Wishlist", icon: Heart },
   ];
