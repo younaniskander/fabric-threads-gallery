@@ -199,8 +199,12 @@ export type Database = {
       orders: {
         Row: {
           created_at: string
+          customer_address: string | null
+          customer_name: string | null
+          customer_phone: string | null
           id: string
           items: Json
+          notes: string | null
           status: string
           stripe_session_id: string | null
           total_amount: number
@@ -208,8 +212,12 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          customer_address?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
           id?: string
           items?: Json
+          notes?: string | null
           status?: string
           stripe_session_id?: string | null
           total_amount?: number
@@ -217,8 +225,12 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          customer_address?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
           id?: string
           items?: Json
+          notes?: string | null
           status?: string
           stripe_session_id?: string | null
           total_amount?: number

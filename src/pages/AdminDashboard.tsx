@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
-  Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp
+  Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
+  ShoppingCart
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -13,8 +14,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/adam-logo-new.png";
+import OrdersSection from "@/components/admin/OrdersSection";
 
-type Tab = "stats" | "fabrics" | "customers" | "brands" | "messages" | "social";
+type Tab = "stats" | "fabrics" | "orders" | "customers" | "brands" | "messages" | "social";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -81,6 +83,7 @@ const AdminDashboard = () => {
 
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
     { id: "stats", label: "إحصائيات", icon: BarChart3 },
+    { id: "orders", label: "الطلبات", icon: ShoppingCart },
     { id: "fabrics", label: "الأقمشة", icon: Package, count: fabrics.length },
     { id: "customers", label: "العملاء", icon: Users, count: customers.length },
     { id: "brands", label: "الماركات", icon: Tag, count: brands.length },
@@ -125,6 +128,7 @@ const AdminDashboard = () => {
         ) : (
           <>
             {tab === "stats" && <StatsTab customers={customers} messages={messages} fabrics={fabrics} brands={brands} />}
+            {tab === "orders" && <OrdersSection />}
             {tab === "fabrics" && <FabricsTab fabrics={fabrics} brands={brands} onRefresh={fetchAll} />}
             {tab === "customers" && <CustomersTab customers={customers} onRefresh={fetchAll} />}
             {tab === "brands" && <BrandsTab brands={brands} onRefresh={fetchAll} />}
