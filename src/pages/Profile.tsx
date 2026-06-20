@@ -202,9 +202,6 @@ const Profile = () => {
                 </div>
               )}
 
-              {tab === "inbox" && (
-                <></>
-              )}
               {tab === "loyalty" && (
                 <div className="space-y-4">
                   <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "نقاط الولاء" : "Loyalty Points"}</h2>
