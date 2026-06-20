@@ -203,6 +203,42 @@ const Profile = () => {
               )}
 
               {tab === "inbox" && (
+                <></>
+              )}
+              {tab === "loyalty" && (
+                <div className="space-y-4">
+                  <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "نقاط الولاء" : "Loyalty Points"}</h2>
+                  <div className="bg-gradient-to-br from-primary/15 to-accent/10 border border-border rounded-xl p-6 flex items-center gap-4">
+                    <Gift size={36} className="text-primary" />
+                    <div>
+                      <div className="font-display text-4xl text-foreground">{points}</div>
+                      <div className="font-body text-sm text-muted-foreground">{lang === "ar" ? "نقطة متاحة" : "available points"}</div>
+                    </div>
+                  </div>
+                  {loyaltyTx.length === 0 ? (
+                    <div className="bg-card border border-border rounded-xl p-10 text-center">
+                      <Gift size={40} className="mx-auto text-muted-foreground mb-3" />
+                      <p className="text-muted-foreground font-body">{lang === "ar" ? "لا توجد حركات نقاط بعد" : "No points activity yet"}</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {loyaltyTx.map((t) => (
+                        <div key={t.id} className="bg-card border border-border rounded-xl p-4 flex items-center justify-between">
+                          <div>
+                            <p className="font-body text-sm text-foreground">{t.reason || (t.type === "redeem" ? (lang === "ar" ? "استبدال نقاط" : "Points redeemed") : (lang === "ar" ? "نقاط مكتسبة" : "Points earned"))}</p>
+                            <span className="font-body text-xs text-muted-foreground">{new Date(t.created_at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}</span>
+                          </div>
+                          <span className={`font-body font-semibold text-sm ${t.points >= 0 ? "text-green-600" : "text-destructive"}`} dir="ltr">
+                            {t.points >= 0 ? "+" : ""}{t.points}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {tab === "inbox" && (
                 <div className="space-y-4">
                   <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "الرسائل والردود" : "Messages & Replies"}</h2>
                   {myMessages.length === 0 ? (
