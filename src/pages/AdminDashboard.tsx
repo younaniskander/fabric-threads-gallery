@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
   Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
-  ShoppingCart, Percent
+  ShoppingCart, Percent, Gift, Search
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,9 @@ import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/adam-logo-new.png";
 import OrdersSection from "@/components/admin/OrdersSection";
 import CouponsSection from "@/components/admin/CouponsSection";
+import LoyaltySection from "@/components/admin/LoyaltySection";
 
-type Tab = "stats" | "fabrics" | "orders" | "customers" | "coupons" | "brands" | "messages" | "social";
+type Tab = "stats" | "fabrics" | "orders" | "customers" | "loyalty" | "coupons" | "brands" | "messages" | "social";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -87,6 +88,7 @@ const AdminDashboard = () => {
     { id: "orders", label: "الطلبات", icon: ShoppingCart },
     { id: "fabrics", label: "الأقمشة", icon: Package, count: fabrics.length },
     { id: "customers", label: "العملاء", icon: Users, count: customers.length },
+    { id: "loyalty", label: "نقاط الولاء", icon: Gift },
     { id: "coupons", label: "العروض والخصومات", icon: Percent },
     { id: "brands", label: "الماركات", icon: Tag, count: brands.length },
     { id: "messages", label: "الرسائل", icon: MessageSquare, count: messages.filter(m => !m.is_read).length },
@@ -133,6 +135,7 @@ const AdminDashboard = () => {
             {tab === "orders" && <OrdersSection />}
             {tab === "fabrics" && <FabricsTab fabrics={fabrics} brands={brands} onRefresh={fetchAll} />}
             {tab === "customers" && <CustomersTab customers={customers} onRefresh={fetchAll} />}
+            {tab === "loyalty" && <LoyaltySection />}
             {tab === "coupons" && <CouponsSection />}
             {tab === "brands" && <BrandsTab brands={brands} onRefresh={fetchAll} />}
             {tab === "messages" && <MessagesTab messages={messages} onRefresh={fetchAll} />}
