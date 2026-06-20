@@ -15,6 +15,8 @@ import UpholsteryIntro from "@/components/UpholsteryIntro";
 import StickyScrollFabrics from "@/components/StickyScrollFabrics";
 import ContactSection from "@/components/ContactSection";
 import OfferPopup from "@/components/OfferPopup";
+import PromoBanner from "@/components/PromoBanner";
+import Testimonials from "@/components/Testimonials";
 
 
 const Index = () => {
@@ -23,12 +25,14 @@ const Index = () => {
   const featured = fabrics.filter((f) => f.isFeatured);
   const newArrivals = fabrics.filter((f) => f.isNew);
   const popular = fabrics.filter((f) => f.isPopular);
+  const offers = fabrics.filter((f) => f.hasOffer);
 
   return (
     <div className="min-h-screen bg-background">
       <OfferPopup />
 
       <Navbar />
+      <PromoBanner />
       <HeroSlider />
 
       {/* Shop by Category */}
@@ -36,6 +40,26 @@ const Index = () => {
 
       {/* Sticky Scroll Fabrics Showcase */}
       <StickyScrollFabrics />
+
+      {/* Special Offers */}
+      {offers.length > 0 && (
+        <section className="container mx-auto px-4 py-16">
+          <div className="mb-10 flex items-center justify-between">
+            <SectionHeader title={t("section.specialOffers") === "section.specialOffers" ? (useLanguage().lang === "ar" ? "العروض الخاصة" : "Special Offers") : t("section.specialOffers")} />
+            <Link
+              to="/gallery"
+              className="hidden rounded-lg border border-border px-6 py-2 font-body text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary md:inline-block"
+            >
+              {t("section.viewAll")}
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {offers.map((f) => (
+              <FabricCard key={f.id} fabric={f} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Featured Products */}
       <section className="container mx-auto px-4 py-16">
@@ -122,6 +146,9 @@ const Index = () => {
           ))}
         </div>
       </section>
+
+      {/* Customer Reviews */}
+      <Testimonials />
 
       {/* Contact Section */}
       <ContactSection />
