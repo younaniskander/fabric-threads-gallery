@@ -20,7 +20,7 @@ import Testimonials from "@/components/Testimonials";
 
 
 const Index = () => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const fabrics = useFabrics();
   const featured = fabrics.filter((f) => f.isFeatured);
   const newArrivals = fabrics.filter((f) => f.isNew);
@@ -45,7 +45,7 @@ const Index = () => {
       {offers.length > 0 && (
         <section className="container mx-auto px-4 py-16">
           <div className="mb-10 flex items-center justify-between">
-            <SectionHeader title={t("section.specialOffers") === "section.specialOffers" ? (useLanguage().lang === "ar" ? "العروض الخاصة" : "Special Offers") : t("section.specialOffers")} />
+            <SectionHeader title={lang === "ar" ? "العروض الخاصة" : "Special Offers"} />
             <Link
               to="/gallery"
               className="hidden rounded-lg border border-border px-6 py-2 font-body text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary md:inline-block"
