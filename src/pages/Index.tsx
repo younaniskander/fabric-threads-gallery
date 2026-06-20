@@ -6,7 +6,6 @@ import { useFabrics } from "@/hooks/useFabrics";
 import FabricCard from "@/components/FabricCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FloatingChat from "@/components/FloatingChat";
 import BrandMarquee from "@/components/BrandMarquee";
 import HeroSlider from "@/components/HeroSlider";
 import CategoryCircles from "@/components/CategoryCircles";
@@ -153,7 +152,6 @@ const Index = () => {
       <FeaturesBar />
 
       <Footer />
-      <FloatingChat />
     </div>
   );
 };
