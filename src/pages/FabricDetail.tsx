@@ -226,9 +226,6 @@ const FabricDetail = () => {
               </a>
             </div>
 
-            {/* Payment Methods */}
-            <PaymentMethods />
-
             {/* Mascot tip */}
             <div className="mt-6 bg-muted rounded-xl p-4 flex items-center gap-4 flex-row-reverse">
               <p className="text-xs font-body text-muted-foreground text-right">
