@@ -214,7 +214,11 @@ const FabricDetail = () => {
                 {lang === "ar" ? "أضف للسلة" : "Add to Cart"}
               </button>
               <a
-                href="https://wa.me/201016694946"
+                href={buildWhatsAppLink(
+                  lang === "ar"
+                    ? `مرحبًا، أريد الاستفسار عن قماش "${fabric.name}" من آدم للقماش.`
+                    : `Hello, I'd like to inquire about "${fabric.nameEn}" fabric from ADAM Fabrics.`,
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="gradient-teal text-primary-foreground py-3 px-6 rounded-lg font-body font-semibold text-center text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
