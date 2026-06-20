@@ -32,6 +32,48 @@ export type Database = {
         }
         Relationships: []
       }
+      coupons: {
+        Row: {
+          code: string
+          created_at: string
+          discount_type: string
+          discount_value: number
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          min_order: number
+          updated_at: string
+          usage_limit: number | null
+          used_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          min_order?: number
+          updated_at?: string
+          usage_limit?: number | null
+          used_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          min_order?: number
+          updated_at?: string
+          usage_limit?: number | null
+          used_count?: number
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string
@@ -198,41 +240,53 @@ export type Database = {
       }
       orders: {
         Row: {
+          coupon_code: string | null
           created_at: string
           customer_address: string | null
           customer_name: string | null
           customer_phone: string | null
+          discount_amount: number
           id: string
           items: Json
           notes: string | null
+          shipping_amount: number
           status: string
           stripe_session_id: string | null
+          subtotal: number | null
           total_amount: number
           user_id: string
         }
         Insert: {
+          coupon_code?: string | null
           created_at?: string
           customer_address?: string | null
           customer_name?: string | null
           customer_phone?: string | null
+          discount_amount?: number
           id?: string
           items?: Json
           notes?: string | null
+          shipping_amount?: number
           status?: string
           stripe_session_id?: string | null
+          subtotal?: number | null
           total_amount?: number
           user_id: string
         }
         Update: {
+          coupon_code?: string | null
           created_at?: string
           customer_address?: string | null
           customer_name?: string | null
           customer_phone?: string | null
+          discount_amount?: number
           id?: string
           items?: Json
           notes?: string | null
+          shipping_amount?: number
           status?: string
           stripe_session_id?: string | null
+          subtotal?: number | null
           total_amount?: number
           user_id?: string
         }
@@ -261,6 +315,30 @@ export type Database = {
           full_name?: string
           id?: string
           phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      shipping_settings: {
+        Row: {
+          free_shipping_enabled: boolean
+          free_shipping_threshold: number
+          id: string
+          shipping_fee: number
+          updated_at: string
+        }
+        Insert: {
+          free_shipping_enabled?: boolean
+          free_shipping_threshold?: number
+          id?: string
+          shipping_fee?: number
+          updated_at?: string
+        }
+        Update: {
+          free_shipping_enabled?: boolean
+          free_shipping_threshold?: number
+          id?: string
+          shipping_fee?: number
           updated_at?: string
         }
         Relationships: []
@@ -342,6 +420,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      validate_coupon: {
+        Args: { _code: string; _subtotal: number }
+        Returns: {
+          discount: number
+          message: string
+          valid: boolean
+        }[]
       }
     }
     Enums: {

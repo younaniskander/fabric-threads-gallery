@@ -8,6 +8,8 @@ import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import CartDrawer from "@/components/CartDrawer";
+import FloatingChat from "@/components/FloatingChat";
+import SplashScreen from "@/components/SplashScreen";
 import Index from "./pages/Index.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import FabricDetail from "./pages/FabricDetail.tsx";
@@ -30,10 +32,12 @@ const App = () => (
         <AuthProvider>
           <CartProvider>
             <TooltipProvider>
+              <SplashScreen />
               <Toaster />
               <Sonner />
               <BrowserRouter>
                 <CartDrawer />
+                <FloatingChat />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/about" element={<About />} />
