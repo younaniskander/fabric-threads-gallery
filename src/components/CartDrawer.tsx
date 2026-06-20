@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
+import { X, Plus, Minus, Trash2, ShoppingBag, Tag, Check, Truck } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,6 +21,80 @@ const CartDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", address: "", notes: "" });
+
+  // Coupon + shipping
+  const [couponInput, setCouponInput] = useState("");
+  const [couponCode, setCouponCode] = useState<string | null>(null);
+  const [discount, setDiscount] = useState(0);
+  const [couponMsg, setCouponMsg] = useState<string | null>(null);
+  const [validating, setValidating] = useState(false);
+  const [shipping, setShipping] = useState({ enabled: true, threshold: 2000, fee: 0 });
+
+  useEffect(() => {
+    supabase
+      .from("shipping_settings")
+      .select("free_shipping_enabled, free_shipping_threshold, shipping_fee")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data)
+          setShipping({
+            enabled: data.free_shipping_enabled,
+            threshold: Number(data.free_shipping_threshold),
+            fee: Number(data.shipping_fee),
+          });
+      });
+  }, []);
+
+  const subtotal = totalPrice;
+  const effectiveDiscount = Math.min(discount, subtotal);
+  const afterDiscount = Math.max(0, subtotal - effectiveDiscount);
+  const shippingCost =
+    shipping.enabled && afterDiscount >= shipping.threshold ? 0 : shipping.fee;
+  const grandTotal = afterDiscount + shippingCost;
+  const remainingForFreeShip = Math.max(0, shipping.threshold - afterDiscount);
+
+  const couponMessages: Record<string, { ar: string; en: string }> = {
+    not_found: { ar: "كود غير صحيح", en: "Invalid code" },
+    inactive: { ar: "هذا الكود موقوف", en: "Code is inactive" },
+    expired: { ar: "انتهت صلاحية الكود", en: "Code expired" },
+    limit_reached: { ar: "تم استنفاد هذا الكود", en: "Code usage limit reached" },
+    min_order: { ar: "الطلب أقل من الحد الأدنى للكود", en: "Order below coupon minimum" },
+    ok: { ar: "تم تطبيق الخصم!", en: "Discount applied!" },
+  };
+
+  const applyCoupon = async () => {
+    const code = couponInput.trim();
+    if (!code) return;
+    setValidating(true);
+    setCouponMsg(null);
+    const { data, error } = await supabase.rpc("validate_coupon", {
+      _code: code,
+      _subtotal: subtotal,
+    });
+    setValidating(false);
+    const row = Array.isArray(data) ? data[0] : data;
+    if (error || !row) {
+      setCouponMsg(lang === "ar" ? "حدث خطأ، حاول مرة أخرى" : "Error, try again");
+      return;
+    }
+    if (row.valid) {
+      setCouponCode(code.toUpperCase());
+      setDiscount(Number(row.discount));
+      setCouponMsg(couponMessages.ok[lang]);
+    } else {
+      setCouponCode(null);
+      setDiscount(0);
+      setCouponMsg(couponMessages[row.message]?.[lang] || (lang === "ar" ? "كود غير صالح" : "Invalid code"));
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponCode(null);
+    setDiscount(0);
+    setCouponInput("");
+    setCouponMsg(null);
+  };
 
   // Prefill from profile when dialog opens
   useEffect(() => {
@@ -62,7 +136,11 @@ const CartDrawer = () => {
           quantity: i.quantity,
           color: i.colorName || null,
         })) as any,
-        total_amount: totalPrice,
+        subtotal,
+        discount_amount: effectiveDiscount,
+        shipping_amount: shippingCost,
+        coupon_code: couponCode,
+        total_amount: grandTotal,
         status: "pending",
         customer_name: form.name.trim(),
         customer_phone: form.phone.trim(),
@@ -71,6 +149,7 @@ const CartDrawer = () => {
       });
       if (error) throw error;
       clearCart();
+      removeCoupon();
       setShowForm(false);
       setIsOpen(false);
       navigate("/payment-success");
