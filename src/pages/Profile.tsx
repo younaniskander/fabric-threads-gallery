@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare } from "lucide-react";
+import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-type Tab = "profile" | "orders" | "inbox" | "wishlist";
+type Tab = "profile" | "orders" | "loyalty" | "inbox" | "wishlist";
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -23,6 +23,8 @@ const Profile = () => {
   const [profile, setProfile] = useState<{ full_name: string; phone: string }>({ full_name: "", phone: "" });
   const [editing, setEditing] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
+  const [points, setPoints] = useState(0);
+  const [loyaltyTx, setLoyaltyTx] = useState<any[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [myMessages, setMyMessages] = useState<any[]>([]);
   const [messageReplies, setMessageReplies] = useState<Record<string, any[]>>({});
@@ -37,8 +39,15 @@ const Profile = () => {
   useEffect(() => {
     if (!user) return;
     // Load profile
-    supabase.from("profiles").select("full_name, phone").eq("id", user.id).maybeSingle().then(({ data }) => {
-      if (data) setProfile({ full_name: data.full_name || "", phone: data.phone || "" });
+    supabase.from("profiles").select("full_name, phone, loyalty_points").eq("id", user.id).maybeSingle().then(({ data }) => {
+      if (data) {
+        setProfile({ full_name: data.full_name || "", phone: data.phone || "" });
+        setPoints((data as any).loyalty_points || 0);
+      }
+    });
+    // Load loyalty transactions
+    supabase.from("loyalty_transactions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => {
+      if (data) setLoyaltyTx(data);
     });
     // Load orders
     supabase.from("orders").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => {
