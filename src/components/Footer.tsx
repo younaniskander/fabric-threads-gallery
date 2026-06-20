@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { defaultWhatsAppLink, WHATSAPP_NUMBER_LOCAL } from "@/lib/whatsapp";
 import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new.png";
 
@@ -72,7 +73,19 @@ const Footer = () => {
               {t("footer.contactUs")}
             </h4>
             <div className="flex flex-col gap-3 font-body text-base text-muted-foreground">
-              <span>📞 +20 100 000 0000</span>
+              <a
+                href={defaultWhatsAppLink(lang)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 transition-colors hover:text-[#25D366] md:justify-start"
+              >
+                <span>💬</span>
+                <span dir="ltr">{WHATSAPP_NUMBER_LOCAL}</span>
+              </a>
+              <a href={`tel:+2${WHATSAPP_NUMBER_LOCAL}`} className="flex items-center justify-center gap-2 transition-colors hover:text-foreground md:justify-start">
+                <span>📞</span>
+                <span dir="ltr">{WHATSAPP_NUMBER_LOCAL}</span>
+              </a>
               <span>✉️ info@adamfabrics.com</span>
               <span>📍 {lang === "ar" ? "القاهرة، مصر" : "Cairo, Egypt"}</span>
             </div>
