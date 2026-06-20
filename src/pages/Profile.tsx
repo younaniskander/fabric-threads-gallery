@@ -180,9 +180,17 @@ const Profile = () => {
                             {new Date(order.created_at).toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US")}
                           </span>
                           <span className={`text-xs px-2 py-1 rounded-full font-body ${
-                            order.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                            order.status === "delivered" || order.status === "completed"
+                              ? "bg-green-100 text-green-700"
+                              : order.status === "cancelled"
+                              ? "bg-red-100 text-red-700"
+                              : "bg-yellow-100 text-yellow-700"
                           }`}>
-                            {order.status === "completed" ? (lang === "ar" ? "مكتمل" : "Completed") : (lang === "ar" ? "قيد المعالجة" : "Pending")}
+                            {order.status === "delivered" || order.status === "completed"
+                              ? (lang === "ar" ? "تم التسليم" : "Delivered")
+                              : order.status === "cancelled"
+                              ? (lang === "ar" ? "ملغي" : "Cancelled")
+                              : (lang === "ar" ? "قيد المعالجة" : "Pending")}
                           </span>
                         </div>
                         <p className="text-sm font-body text-foreground">
