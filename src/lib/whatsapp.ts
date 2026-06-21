@@ -7,13 +7,33 @@ export const DEFAULT_WHATSAPP_MESSAGE_AR =
 export const DEFAULT_WHATSAPP_MESSAGE_EN =
   "Hello, I would like to inquire about ADAM Fabrics products.";
 
+const isMobileDevice = () => {
+  if (typeof navigator === "undefined") return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
+};
+
 /**
- * Build a wa.me link with an optional pre-filled message.
+ * Build a WhatsApp link with an optional pre-filled message.
+ * Uses wa.me on mobile (opens the WhatsApp app) and web.whatsapp.com on desktop
+ * to avoid the api.whatsapp.com redirect that some browsers/networks block.
  */
 export function buildWhatsAppLink(message?: string): string {
-  const base = `https://wa.me/${WHATSAPP_NUMBER_INTL}`;
-  if (!message) return base;
-  return `${base}?text=${encodeURIComponent(message)}`;
+  const phone = WHATSAPP_NUMBER_INTL;
+  const encodedMessage = message ? encodeURIComponent(message) : "";
+
+  if (isMobileDevice()) {
+    // Mobile: wa.me opens the native WhatsApp app directly
+    return encodedMessage
+      ? `https://wa.me/${phone}?text=${encodedMessage}`
+      : `https://wa.me/${phone}`;
+  }
+
+  // Desktop: use WhatsApp Web directly to avoid blocked api.whatsapp.com redirects
+  return encodedMessage
+    ? `https://web.whatsapp.com/send?phone=${phone}&text=${encodedMessage}`
+    : `https://web.whatsapp.com/send?phone=${phone}`;
 }
 
 /**
