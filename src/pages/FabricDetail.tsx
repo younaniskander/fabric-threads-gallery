@@ -104,7 +104,10 @@ const FabricDetail = () => {
 
 
             <h1 className="font-display text-3xl md:text-4xl text-foreground mb-2">{fabric.name}</h1>
-            <p className="text-muted-foreground font-body text-sm mb-6">{fabric.nameEn}</p>
+            <p className="text-muted-foreground font-body text-sm mb-4">{fabric.nameEn}</p>
+            {fabric.price && (
+              <p className="font-display text-2xl text-primary mb-6">{fabric.price}</p>
+            )}
 
             {/* Specs */}
             <div className="bg-card border border-border rounded-xl p-5 mb-6">

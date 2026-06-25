@@ -17,6 +17,7 @@ function mapRow(row: any): Fabric {
     gsm: row.gsm || 0,
     origin: row.origin || "",
     composition: row.composition || "",
+    price: row.price || "",
     features: row.features || [],
     usage: row.usage_suggestions || [],
     isFeatured: !!row.is_featured,

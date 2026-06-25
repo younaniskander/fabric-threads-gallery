@@ -250,7 +250,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     name: "", name_en: "", type: "cotton", category: "upholstery", brand: "",
-    origin: "", composition: "", gsm: "",
+    origin: "", composition: "", gsm: "", price: "",
     is_featured: false, is_new: false, is_popular: false, coming_soon: false,
     has_offer: false, offer_text: "", in_all_branches: true,
     image_url: "",
@@ -271,6 +271,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
       origin: form.origin.trim() || null,
       composition: form.composition.trim() || null,
       gsm: form.gsm ? parseInt(form.gsm) : null,
+      price: form.price.trim() || null,
       is_featured: form.is_featured,
       is_new: form.is_new,
       is_popular: form.is_popular,
@@ -285,7 +286,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
     } else {
       toast({ title: "تم بنجاح", description: "تم إضافة القماش" });
       setShowForm(false);
-      setForm({ name: "", name_en: "", type: "cotton", category: "upholstery", brand: "", origin: "", composition: "", gsm: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
+      setForm({ name: "", name_en: "", type: "cotton", category: "upholstery", brand: "", origin: "", composition: "", gsm: "", price: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
       onRefresh();
     }
   };
@@ -336,6 +337,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
             <div><Label className="font-body text-sm">بلد المنشأ</Label><Input value={form.origin} onChange={e => setForm({...form, origin: e.target.value})} className="font-body" /></div>
             <div><Label className="font-body text-sm">التركيب</Label><Input value={form.composition} onChange={e => setForm({...form, composition: e.target.value})} className="font-body" /></div>
             <div><Label className="font-body text-sm">GSM</Label><Input type="number" value={form.gsm} onChange={e => setForm({...form, gsm: e.target.value})} dir="ltr" /></div>
+            <div><Label className="font-body text-sm">السعر</Label><Input value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="مثال: 250 ج.م / متر" className="font-body" /></div>
             <div><Label className="font-body text-sm">نص العرض / الخصم</Label><Input value={form.offer_text} onChange={e => setForm({...form, offer_text: e.target.value})} placeholder="مثال: خصم 20%" className="font-body" /></div>
             <div>
               <Label className="font-body text-sm">صورة المنتج</Label>
