@@ -12,3 +12,5 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://fabric-threads-gallery.lovable.app/sitemap.xml
