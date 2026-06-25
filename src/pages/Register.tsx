@@ -32,7 +32,10 @@ const Register = () => {
     }
 
     setLoading(true);
-    const { error } = await supabase.from("customers").insert({ name: trimmedName, phone: trimmedPhone });
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase
+      .from("customers")
+      .insert({ name: trimmedName, phone: trimmedPhone, user_id: user?.id ?? null });
     setLoading(false);
 
     if (error) {
