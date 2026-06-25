@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BrandMarquee from "@/components/BrandMarquee";
+import Seo from "@/components/Seo";
 
 
 const values = [
@@ -22,6 +23,11 @@ const values = [
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="من نحن | آدم للأقمشة"
+        description="تعرّف على قصة آدم للأقمشة وقيمنا في انتقاء أرقى أقمشة التنجيد والستائر المحلية والمستوردة بخبرة عملية."
+        path="/about"
+      />
       <Navbar />
 
       <main>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import Seo from "@/components/Seo";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFabrics } from "@/hooks/useFabrics";
 import FabricCard from "@/components/FabricCard";
@@ -29,6 +30,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="آدم للأقمشة | ADAM Fabrics - أرقى الأقمشة المحلية والمستوردة"
+        description="آدم للأقمشة - وجهتك الأولى لأرقى أقمشة التنجيد والستائر المحلية والمستوردة من الحرير والقطن والكتان والمخمل."
+        path="/"
+      />
       <OfferPopup />
 
       <Navbar />
