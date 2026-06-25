@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
 import ReviewsSection from "@/components/ReviewsSection";
+import Seo from "@/components/Seo";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { toast } from "sonner";
 
@@ -51,6 +52,13 @@ const FabricDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`${fabric.name} | آدم للأقمشة`}
+        description={`${fabric.name} من ${brandName}${fabric.origin ? ` - ${fabric.origin}` : ""}. ${fabric.composition || "قماش فاخر"} متوفر لدى آدم للأقمشة.`.slice(0, 160)}
+        path={`/fabric/${fabric.id}`}
+        type="product"
+        image={displayImage?.startsWith("http") ? displayImage : undefined}
+      />
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
