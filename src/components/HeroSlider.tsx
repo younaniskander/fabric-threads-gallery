@@ -64,7 +64,15 @@ const HeroSlider = () => {
           transition={{ duration: 0.7 }}
           className="absolute inset-0"
         >
-          <img src={slide.image} alt="" className="h-full w-full object-cover" />
+          <img
+            src={slide.image}
+            alt=""
+            width={1920}
+            height={1080}
+            fetchPriority={current === 0 ? "high" : "auto"}
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
           <div className="absolute inset-0 bg-foreground/40" />
         </motion.div>
       </AnimatePresence>
