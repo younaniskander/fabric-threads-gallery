@@ -61,6 +61,9 @@ const FabricCard = ({ fabric }: FabricCardProps) => {
         <div className="p-4">
           <h3 className="font-display text-lg text-foreground mb-1">{fabric.name}</h3>
           <p className="text-xs text-muted-foreground font-body mb-2">{fabric.brand} • {fabric.origin}</p>
+          {fabric.price && (
+            <p className="text-sm font-body font-semibold text-primary mb-2">{fabric.price}</p>
+          )}
           <div className="flex items-center gap-1.5 mb-3">
             {fabric.colorVariants?.slice(0, 5).map((variant, i) => (
               <span
