@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
 import ReviewsSection from "@/components/ReviewsSection";
+import Seo from "@/components/Seo";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { toast } from "sonner";
 
@@ -51,6 +52,13 @@ const FabricDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`${fabric.name} | آدم للأقمشة`}
+        description={`${fabric.name} من ${brandName}${fabric.origin ? ` - ${fabric.origin}` : ""}. ${fabric.composition || "قماش فاخر"} متوفر لدى آدم للأقمشة.`.slice(0, 160)}
+        path={`/fabric/${fabric.id}`}
+        type="product"
+        image={displayImage?.startsWith("http") ? displayImage : undefined}
+      />
       <Navbar />
 
       <div className="container mx-auto px-4 py-8">
@@ -111,7 +119,7 @@ const FabricDetail = () => {
 
             {/* Specs */}
             <div className="bg-card border border-border rounded-xl p-5 mb-6">
-              <h3 className="font-display text-lg text-foreground mb-4">المواصفات</h3>
+              <h2 className="font-display text-lg text-foreground mb-4">المواصفات</h2>
               <div className="grid grid-cols-2 gap-y-3 text-sm font-body">
                 <SpecRow label="النوع" value={typeName} />
                 <SpecRow label="الماركة" value={brandName} />
@@ -124,7 +132,7 @@ const FabricDetail = () => {
 
             {/* Features */}
             <div className="mb-6">
-              <h3 className="font-display text-lg text-foreground mb-3">المميزات</h3>
+              <h2 className="font-display text-lg text-foreground mb-3">المميزات</h2>
               <div className="flex flex-wrap gap-2">
                 {fabric.features.map((f, i) => (
                   <span key={i} className="bg-muted text-muted-foreground text-xs px-3 py-1.5 rounded-full font-body">
@@ -136,7 +144,7 @@ const FabricDetail = () => {
 
             {/* Usage */}
             <div className="mb-6">
-              <h3 className="font-display text-lg text-foreground mb-3">الاستخدامات</h3>
+              <h2 className="font-display text-lg text-foreground mb-3">الاستخدامات</h2>
               <div className="flex flex-wrap gap-2">
                 {fabric.usage.map((u, i) => (
                   <span key={i} className="bg-primary/10 text-primary text-xs px-3 py-1.5 rounded-full font-body">
@@ -178,6 +186,7 @@ const FabricDetail = () => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  aria-label="Decrease quantity"
                   className="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary"
                 >
                   <Minus size={16} />
@@ -185,6 +194,7 @@ const FabricDetail = () => {
                 <span className="text-lg font-body font-medium w-8 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
+                  aria-label="Increase quantity"
                   className="w-9 h-9 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary"
                 >
                   <Plus size={16} />

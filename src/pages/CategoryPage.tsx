@@ -7,6 +7,7 @@ import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 const categoryConfig: Record<string, { ar: string; en: string; filter: (f: Fabric) => boolean }> = {
   upholstery: {
@@ -67,6 +68,11 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={`${title || "تصنيف الأقمشة"} | آدم للأقمشة`}
+        description={`تصفّح ${title || "تشكيلة الأقمشة"} من آدم للأقمشة بأجود الخامات والألوان المتنوعة المناسبة لاحتياجك.`}
+        path={`/category/${slug ?? ""}`}
+      />
       <Navbar />
       <div className="container mx-auto px-4 py-10">
         <SectionHeader title={title} subtitle="" />

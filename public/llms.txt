@@ -1,0 +1,18 @@
+# آدم للأقمشة | ADAM Fabrics
+
+> A bilingual (Arabic/English) fabric store offering premium local and imported upholstery and curtain fabrics — silk, cotton, linen, and velvet. WhatsApp is the primary contact channel.
+
+ADAM Fabrics showcases a catalog of upholstery and curtain fabrics with detailed specifications (composition, GSM, origin, color variants), pricing, customer reviews, and a loyalty program. Orders and inquiries are handled through WhatsApp and online checkout.
+
+## Pages
+
+- [Home](/): Featured collections, offers, and brand highlights.
+- [Gallery](/gallery): Browse and filter the full fabric catalog by type, category, brand, and origin.
+- [Upholstery Collection](/gallery?category=upholstery): Premium sofa and furniture fabrics.
+- [Curtains Collection](/gallery?category=curtains): Luxury curtain fabrics in modern and classic designs.
+- [About](/about): The ADAM Fabrics story, values, and showroom information.
+- [Register](/register): Customer registration to receive updates and offers.
+
+## Optional
+
+- [Contact](/contact): Reach the store, primarily via WhatsApp.

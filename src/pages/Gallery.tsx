@@ -8,6 +8,7 @@ import FabricCard from "@/components/FabricCard";
 import SectionHeader from "@/components/SectionHeader";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 const Gallery = () => {
   const [searchParams] = useSearchParams();
@@ -44,6 +45,11 @@ const Gallery = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="معرض الأقمشة | آدم للأقمشة"
+        description="تصفّح مجموعة آدم للأقمشة الكاملة من أقمشة التنجيد والستائر. فلترة حسب النوع والتصنيف والماركة وبلد المنشأ."
+        path="/gallery"
+      />
       <Navbar />
 
       <div className="container mx-auto px-4 py-10">
@@ -63,12 +69,14 @@ const Gallery = () => {
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
+            aria-label="Toggle filters"
+            aria-pressed={showFilters}
             className={`p-2.5 rounded-lg border transition-colors ${showFilters ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border text-muted-foreground hover:text-foreground"}`}
           >
             <SlidersHorizontal size={18} />
           </button>
           {hasFilters && (
-            <button onClick={clearFilters} className="p-2.5 rounded-lg border border-border bg-card text-muted-foreground hover:text-foreground">
+            <button onClick={clearFilters} aria-label="Clear filters" className="p-2.5 rounded-lg border border-border bg-card text-muted-foreground hover:text-foreground">
               <X size={18} />
             </button>
           )}

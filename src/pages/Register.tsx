@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import mascotHappy from "@/assets/adam-logo-new.png";
+import Seo from "@/components/Seo";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -50,6 +51,11 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="تسجيل عميل جديد | آدم للأقمشة"
+        description="سجّل بياناتك لدى آدم للأقمشة لتصلك أحدث العروض والمجموعات الجديدة من أقمشة التنجيد والستائر."
+        path="/register"
+      />
       <Navbar />
       <div className="container mx-auto px-4 py-16">
         <motion.div className="mx-auto max-w-md rounded-2xl bg-card p-8 shadow-fabric" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
