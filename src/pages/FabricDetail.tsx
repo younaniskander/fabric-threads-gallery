@@ -305,45 +305,4 @@ const SpecRow = ({ label, value }: { label: string; value: string }) => (
   </>
 );
 
-const ImageZoom = ({ src, alt }: { src: string; alt: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [zoom, setZoom] = useState(false);
-  const [position, setPosition] = useState({ x: 50, y: 50 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setPosition({ x, y });
-  };
-
-  return (
-    <div
-      ref={containerRef}
-      className="rounded-xl overflow-hidden shadow-fabric aspect-square cursor-crosshair relative"
-      onMouseEnter={() => setZoom(true)}
-      onMouseLeave={() => setZoom(false)}
-      onMouseMove={handleMouseMove}
-    >
-      <motion.img
-        src={src}
-        alt={alt}
-        className="w-full h-full object-cover transition-transform duration-200"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        style={
-          zoom
-            ? {
-                transform: "scale(2)",
-                transformOrigin: `${position.x}% ${position.y}%`,
-              }
-            : undefined
-        }
-      />
-    </div>
-  );
-};
-
 export default FabricDetail;
