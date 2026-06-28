@@ -172,6 +172,19 @@ const DesktopStage = ({ src, alt }: { src: string; alt: string }) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const frame = useRef<number | null>(null);
   const [zooming, setZooming] = useState(false);
+  const [isRtl, setIsRtl] = useState(false);
+
+  useEffect(() => {
+    const read = () =>
+      setIsRtl(document.documentElement.dir === "rtl");
+    read();
+    const observer = new MutationObserver(read);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["dir"],
+    });
+    return () => observer.disconnect();
+  }, []);
 
   const apply = useCallback((clientX: number, clientY: number) => {
     const stage = stageRef.current;
@@ -272,7 +285,10 @@ const DesktopStage = ({ src, alt }: { src: string; alt: string }) => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="pointer-events-none absolute left-[calc(100%+1.5rem)] top-0 z-30 hidden aspect-square w-full overflow-hidden rounded-2xl border border-border bg-card shadow-fabric-hover lg:block"
+            className={cn(
+              "pointer-events-none absolute top-0 z-30 hidden aspect-square w-full overflow-hidden rounded-2xl border border-border bg-card shadow-fabric-hover lg:block",
+              isRtl ? "right-[calc(100%+1.5rem)]" : "left-[calc(100%+1.5rem)]",
+            )}
             style={{
               backgroundImage: `url(${src})`,
               backgroundRepeat: "no-repeat",
