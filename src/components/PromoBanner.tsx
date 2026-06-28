@@ -11,14 +11,14 @@ const PromoBanner = () => {
           { icon: Tag, text: "خصومات موسمية تصل إلى 25%" },
           { icon: Clock, text: "عروض لفترة محدودة على المخمل الفاخر" },
           { icon: Sparkles, text: "وصل حديثاً: أحدث تشكيلات الأقمشة" },
-          { icon: MessageCircle, text: "استفسر عبر واتساب واحصل على عينة مجانية" },
+          { icon: MessageCircle, text: "استفسر عبر واتساب عن تشكيلاتنا" },
         ]
       : [
           { icon: Truck, text: "Free shipping on orders over 2000 EGP" },
           { icon: Tag, text: "Seasonal discounts up to 25%" },
           { icon: Clock, text: "Limited-time offers on premium velvet" },
           { icon: Sparkles, text: "New arrivals: latest fabric collections" },
-          { icon: MessageCircle, text: "Ask on WhatsApp and get a free sample" },
+          { icon: MessageCircle, text: "Ask on WhatsApp about our collections" },
         ];
 
   const loop = [...items, ...items];
