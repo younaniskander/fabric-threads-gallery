@@ -8,7 +8,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import GlassThemeToggle from "@/components/GlassThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
-import { defaultWhatsAppLink, WHATSAPP_NUMBER_LOCAL } from "@/lib/whatsapp";
+import GlassThemeToggle from "@/components/GlassThemeToggle";
 import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new-white.png";
 
