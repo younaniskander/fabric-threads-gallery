@@ -4,7 +4,6 @@ import { X } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   defaultWhatsAppLink,
-  WHATSAPP_NUMBER_LOCAL,
 } from "@/lib/whatsapp";
 
 const WhatsAppIcon = ({ size = 28 }: { size?: number }) => (
@@ -52,9 +51,6 @@ const FloatingChat = () => {
               <WhatsAppIcon size={18} />
               {lang === "ar" ? "تواصل عبر واتساب" : "Chat on WhatsApp"}
             </a>
-            <p className="mt-2 text-center font-body text-xs text-muted-foreground" dir="ltr">
-              {WHATSAPP_NUMBER_LOCAL}
-            </p>
           </motion.div>
         )}
       </AnimatePresence>
