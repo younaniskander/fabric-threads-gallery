@@ -6,9 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
-import GlassThemeToggle from "@/components/GlassThemeToggle";
 import { useTheme } from "@/contexts/ThemeContext";
-import GlassThemeToggle from "@/components/GlassThemeToggle";
 import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new-white.png";
 
