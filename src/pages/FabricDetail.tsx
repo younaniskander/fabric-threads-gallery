@@ -8,7 +8,6 @@ import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import FreeSamplePopup from "@/components/FreeSamplePopup";
 import ReviewsSection from "@/components/ReviewsSection";
 import ProductImageViewer from "@/components/ProductImageViewer";
 import Seo from "@/components/Seo";
@@ -22,7 +21,6 @@ const FabricDetail = () => {
   const fabric = fabrics.find((f) => f.id === id);
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [showSamplePopup, setShowSamplePopup] = useState(false);
   const { addItem } = useCart();
   const { lang } = useLanguage();
 
@@ -47,13 +45,6 @@ const FabricDetail = () => {
       if (idx >= 0) setActiveImage(idx);
     }
   }, [selectedColor, fabric, galleryImages]);
-
-  // Show free sample popup each time user navigates to a new fabric
-  useEffect(() => {
-    setShowSamplePopup(false);
-    const timer = setTimeout(() => setShowSamplePopup(true), 1200);
-    return () => clearTimeout(timer);
-  }, [id]);
 
   if (!fabric) {
     return (
@@ -270,7 +261,7 @@ const FabricDetail = () => {
             {/* Mascot tip */}
             <div className="mt-6 bg-muted rounded-xl p-4 flex items-center gap-4 flex-row-reverse">
               <p className="text-xs font-body text-muted-foreground text-right">
-                💡 هذا القماش مثالي لـ{fabric.usage[0]}! تواصل معنا للحصول على عينة مجانية.
+                💡 هذا القماش مثالي لـ{fabric.usage[0]}! تواصل معنا لمزيد من التفاصيل.
               </p>
             </div>
           </motion.div>
@@ -281,19 +272,6 @@ const FabricDetail = () => {
       </div>
 
       <Footer />
-
-      {fabric && showSamplePopup && (
-        <FreeSamplePopup
-          open={showSamplePopup}
-          onClose={() => setShowSamplePopup(false)}
-          fabric={{
-            id: fabric.id,
-            name: fabric.name,
-            nameEn: fabric.nameEn,
-            image: fabric.image,
-          }}
-        />
-      )}
     </div>
   );
 };
