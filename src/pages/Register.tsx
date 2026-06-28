@@ -2,6 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { UserPlus, Phone, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,11 +19,17 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedName = name.trim();
     const trimmedPhone = phone.trim();
+
+    if (!user) {
+      toast({ title: "تسجيل الدخول مطلوب", description: "يرجى تسجيل الدخول أولاً لإتمام التسجيل", variant: "destructive" });
+      return;
+    }
 
     if (!trimmedName || trimmedName.length > 100) {
       toast({ title: "خطأ", description: "يرجى إدخال اسم صحيح (أقصى 100 حرف)", variant: "destructive" });
@@ -33,10 +41,9 @@ const Register = () => {
     }
 
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
     const { error } = await supabase
       .from("customers")
-      .insert({ name: trimmedName, phone: trimmedPhone, user_id: user?.id ?? null });
+      .insert({ name: trimmedName, phone: trimmedPhone, user_id: user.id });
     setLoading(false);
 
     if (error) {
