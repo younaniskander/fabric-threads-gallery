@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle, ShoppingBag, Plus, Minus } from "lucide-react";
@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FreeSamplePopup from "@/components/FreeSamplePopup";
 import ReviewsSection from "@/components/ReviewsSection";
+import ProductImageViewer from "@/components/ProductImageViewer";
 import Seo from "@/components/Seo";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { toast } from "sonner";
@@ -24,6 +25,28 @@ const FabricDetail = () => {
   const [showSamplePopup, setShowSamplePopup] = useState(false);
   const { addItem } = useCart();
   const { lang } = useLanguage();
+
+  // Build a de-duplicated gallery from the main image + any color-variant images.
+  const galleryImages = useMemo(() => {
+    if (!fabric) return [];
+    const imgs = [
+      fabric.image,
+      ...(fabric.colorVariants?.map((v) => v.image).filter(Boolean) as string[]),
+    ];
+    return Array.from(new Set(imgs.filter(Boolean)));
+  }, [fabric]);
+
+  const [activeImage, setActiveImage] = useState(0);
+
+  // When the user picks a color whose variant has its own image, sync the viewer.
+  useEffect(() => {
+    if (!fabric) return;
+    const variantImage = fabric.colorVariants?.[selectedColor]?.image;
+    if (variantImage) {
+      const idx = galleryImages.indexOf(variantImage);
+      if (idx >= 0) setActiveImage(idx);
+    }
+  }, [selectedColor, fabric, galleryImages]);
 
   // Show free sample popup each time user navigates to a new fabric
   useEffect(() => {
@@ -48,7 +71,7 @@ const FabricDetail = () => {
   const typeName = fabricTypes.find((t) => t.id === fabric.type)?.name || fabric.type;
   const brandName = brands.find((b) => b.id === fabric.brand)?.name || fabric.brand;
   const currentVariant = fabric.colorVariants?.[selectedColor];
-  const displayImage = currentVariant?.image || fabric.image;
+  const displayImage = galleryImages[activeImage] || currentVariant?.image || fabric.image;
 
   return (
     <div className="min-h-screen bg-background">
@@ -78,10 +101,11 @@ const FabricDetail = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <ImageZoom
-              key={selectedColor}
-              src={displayImage}
-              alt={`${fabric.name} - ${currentVariant?.name || ''}`}
+            <ProductImageViewer
+              images={galleryImages}
+              index={activeImage}
+              onIndexChange={setActiveImage}
+              alt={`${fabric.name}${currentVariant?.name ? ` - ${currentVariant.name}` : ""}`}
             />
           </motion.div>
 
