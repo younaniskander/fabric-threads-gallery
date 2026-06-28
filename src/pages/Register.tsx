@@ -81,6 +81,13 @@ const Register = () => {
                 تسجيل عميل آخر
               </Button>
             </motion.div>
+          ) : !user ? (
+            <div className="py-8 text-center">
+              <p className="mb-6 font-body text-muted-foreground">يرجى تسجيل الدخول أولاً حتى نتمكن من حفظ بياناتك بأمان.</p>
+              <Button asChild className="gradient-teal text-primary-foreground">
+                <Link to="/auth">تسجيل الدخول</Link>
+              </Button>
+            </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
