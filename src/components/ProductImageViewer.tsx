@@ -328,7 +328,7 @@ const MobileStage = ({
     reset();
   }, [src, reset]);
 
-  const distance = (t: TouchList) => {
+  const distance = (t: React.TouchList) => {
     const [a, b] = [t[0], t[1]];
     return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
   };
