@@ -96,9 +96,9 @@ const ReportsSection = () => {
             <div key={status} className="flex items-center gap-3">
               <span className="font-body text-sm text-foreground w-28">{status}</span>
               <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
-                <div className="h-full bg-primary" style={{ width: `${(count / Math.max(1, fOrders.length)) * 100}%` }} />
+                <div className="h-full bg-primary" style={{ width: `${((count as number) / Math.max(1, fOrders.length)) * 100}%` }} />
               </div>
-              <span className="font-body text-xs text-muted-foreground w-8 text-left">{count}</span>
+              <span className="font-body text-xs text-muted-foreground w-8 text-left">{count as number}</span>
             </div>
           ))}
         </div>
