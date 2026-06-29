@@ -201,6 +201,25 @@ const CouponsSection = () => {
             <Label className="font-body text-sm">تاريخ الانتهاء (اختياري)</Label>
             <Input type="date" value={form.expires_at} onChange={(e) => setForm({ ...form, expires_at: e.target.value })} />
           </div>
+          <div>
+            <Label className="font-body text-sm">تاريخ البدء (اختياري)</Label>
+            <Input type="date" value={form.starts_at} onChange={(e) => setForm({ ...form, starts_at: e.target.value })} />
+          </div>
+          <div>
+            <Label className="font-body text-sm">حد الاستخدام لكل عميل (اختياري)</Label>
+            <Input type="number" value={form.per_user_limit} onChange={(e) => setForm({ ...form, per_user_limit: e.target.value })} />
+          </div>
+          <div>
+            <Label className="font-body text-sm">مخصص لشريحة (اختياري)</Label>
+            <select className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm" value={form.segment_key} onChange={(e) => setForm({ ...form, segment_key: e.target.value })}>
+              <option value="">كل العملاء</option>
+              {segments.map((s) => <option key={s.id} value={s.key}>{s.name_ar || s.name}</option>)}
+            </select>
+          </div>
+          <div className="md:col-span-3">
+            <Label className="font-body text-sm">وصف الكوبون (اختياري)</Label>
+            <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="خصم الصيف لكبار العملاء" />
+          </div>
         </div>
         <Button onClick={addCoupon} disabled={saving} className="mt-4 gap-2 font-body">
           <Plus size={16} /> إضافة الكود
