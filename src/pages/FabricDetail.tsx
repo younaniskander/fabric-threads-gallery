@@ -236,7 +236,7 @@ const FabricDetail = () => {
                     color: currentVariant?.color,
                     colorName: currentVariant?.name,
                   }, quantity);
-                  toast.success(lang === "ar" ? "تمت الإضافة للسلة" : "Added to cart");
+                  toast.success(lang === "ar" ? "تمت الإضافة للسلة" : "Added to cart", { duration: 3000 });
                 }}
 
                 className="flex-1 bg-primary text-primary-foreground py-3 rounded-lg font-body font-semibold text-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
