@@ -93,6 +93,7 @@ const CartDrawer = () => {
       return;
     }
     setLoading(true);
+    const waMessage = buildOrderMessage();
     try {
       const { error } = await supabase.from("orders").insert({
         user_id: user.id,
@@ -103,9 +104,8 @@ const CartDrawer = () => {
           color: i.colorName || null,
         })) as any,
         subtotal,
-        discount_amount: effectiveDiscount,
-        shipping_amount: shippingCost,
-        coupon_code: couponCode,
+        discount_amount: 0,
+        shipping_amount: 0,
         total_amount: grandTotal,
         status: "pending",
         customer_name: form.name.trim(),
@@ -115,9 +115,10 @@ const CartDrawer = () => {
       });
       if (error) throw error;
       clearCart();
-      removeCoupon();
       setShowForm(false);
       setIsOpen(false);
+      // Open WhatsApp with the full order details for the customer to confirm.
+      window.open(buildWhatsAppLink(waMessage), "_blank");
       navigate("/payment-success");
     } catch (err: any) {
       console.error(err);
