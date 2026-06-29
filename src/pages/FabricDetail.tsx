@@ -10,6 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReviewsSection from "@/components/ReviewsSection";
 import ProductImageViewer from "@/components/ProductImageViewer";
+import RecommendedFabrics from "@/components/RecommendedFabrics";
 import Seo from "@/components/Seo";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { toast } from "sonner";
