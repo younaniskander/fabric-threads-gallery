@@ -21,6 +21,7 @@ import PaymentSuccess from "./pages/PaymentSuccess.tsx";
 import Auth from "./pages/Auth.tsx";
 import Profile from "./pages/Profile.tsx";
 import CategoryPage from "./pages/CategoryPage.tsx";
+import Pos from "./pages/Pos.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -50,6 +51,7 @@ const App = () => (
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/admin-login" element={<AdminLogin />} />
                   <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/pos" element={<Pos />} />
                   <Route path="/payment-success" element={<PaymentSuccess />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
