@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { parsePriceAmount } from "@/lib/phoneAuth";
 
 export interface CartItem {
   id: string;
@@ -49,12 +50,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = (item: Omit<CartItem, "quantity">, qty = 1) => {
     setItems((prev) => {
+      const normalizedItem = {
+        ...item,
+        price: item.price > 0 ? item.price : parsePriceAmount(item.priceDisplay),
+      };
       const key = getKey(item);
       const existing = prev.find((i) => getKey(i) === key);
       if (existing) {
-        return prev.map((i) => getKey(i) === key ? { ...i, quantity: i.quantity + qty } : i);
+        return prev.map((i) =>
+          getKey(i) === key
+            ? {
+                ...i,
+                ...normalizedItem,
+                quantity: i.quantity + qty,
+              }
+            : i,
+        );
       }
-      return [...prev, { ...item, quantity: qty }];
+      return [...prev, { ...normalizedItem, quantity: qty }];
     });
     setIsOpen(true);
   };
@@ -73,7 +86,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clearCart = () => setItems([]);
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0);
-  const totalPrice = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  const totalPrice = items.reduce((s, i) => s + (i.price || parsePriceAmount(i.priceDisplay)) * i.quantity, 0);
 
   return (
     <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, isOpen, setIsOpen }}>

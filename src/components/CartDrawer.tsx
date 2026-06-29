@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { formatMoney, parsePriceAmount } from "@/lib/phoneAuth";
 
 const CartDrawer = () => {
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice, isOpen, setIsOpen } = useCart();
@@ -53,6 +54,7 @@ const CartDrawer = () => {
     shipping.enabled && afterDiscount >= shipping.threshold ? 0 : shipping.fee;
   const grandTotal = afterDiscount + shippingCost;
   const remainingForFreeShip = Math.max(0, shipping.threshold - afterDiscount);
+  const getItemUnitPrice = (price: number, priceDisplay: string) => price || parsePriceAmount(priceDisplay);
 
   const couponMessages: Record<string, { ar: string; en: string }> = {
     not_found: { ar: "كود غير صحيح", en: "Invalid code" },
@@ -132,7 +134,7 @@ const CartDrawer = () => {
         user_id: user.id,
         items: items.map((i) => ({
           name: lang === "ar" ? i.name : i.nameEn,
-          price: i.price,
+          price: getItemUnitPrice(i.price, i.priceDisplay),
           quantity: i.quantity,
           color: i.colorName || null,
         })) as any,
@@ -203,7 +205,11 @@ const CartDrawer = () => {
                     </p>
                   </div>
                 ) : (
-                  items.map((item) => (
+                  items.map((item) => {
+                    const unitPrice = getItemUnitPrice(item.price, item.priceDisplay);
+                    const lineTotal = unitPrice * item.quantity;
+
+                    return (
                     <div key={`${item.id}__${item.color || "default"}`} className="flex gap-3 bg-card rounded-lg border border-border p-3">
                       <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-md flex-shrink-0" />
                       <div className="flex-1 min-w-0">
@@ -216,7 +222,12 @@ const CartDrawer = () => {
                             <span className="text-xs text-muted-foreground">{item.colorName}</span>
                           </div>
                         )}
-                        <p className="text-sm font-semibold text-primary mt-1">{item.priceDisplay}</p>
+                        <div className="mt-1 flex items-center justify-between gap-2">
+                          <p className="text-sm font-semibold text-primary">{formatMoney(unitPrice, lang)}</p>
+                          {item.quantity > 1 && (
+                            <p className="text-xs font-medium text-foreground">{formatMoney(lineTotal, lang)}</p>
+                          )}
+                        </div>
                         <div className="flex items-center gap-2 mt-2">
                           <button
                             onClick={() => updateQuantity(item.id, item.color, item.quantity - 1)}
@@ -240,7 +251,8 @@ const CartDrawer = () => {
                         </div>
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
 
@@ -254,8 +266,8 @@ const CartDrawer = () => {
                         {shippingCost === 0
                           ? (lang === "ar" ? "مبروك! حصلت على شحن مجاني" : "You've got free shipping!")
                           : lang === "ar"
-                          ? `أضف ${remainingForFreeShip.toLocaleString()} ج.م للحصول على شحن مجاني`
-                          : `Add ${remainingForFreeShip.toLocaleString()} EGP for free shipping`}
+                          ? `أضف ${formatMoney(remainingForFreeShip, lang)} للحصول على شحن مجاني`
+                          : `Add ${formatMoney(remainingForFreeShip, lang)} for free shipping`}
                       </p>
                     </div>
                   )}
@@ -293,12 +305,12 @@ const CartDrawer = () => {
                   <div className="space-y-1.5 border-t border-border pt-3 font-body text-sm">
                     <div className="flex items-center justify-between text-muted-foreground">
                       <span>{lang === "ar" ? "المجموع الفرعي" : "Subtotal"}</span>
-                      <span>{subtotal.toLocaleString()} {lang === "ar" ? "ج.م" : "EGP"}</span>
+                      <span>{formatMoney(subtotal, lang)}</span>
                     </div>
                     {effectiveDiscount > 0 && (
                       <div className="flex items-center justify-between text-primary">
                         <span>{lang === "ar" ? "الخصم" : "Discount"}</span>
-                        <span>- {effectiveDiscount.toLocaleString()} {lang === "ar" ? "ج.م" : "EGP"}</span>
+                        <span>- {formatMoney(effectiveDiscount, lang)}</span>
                       </div>
                     )}
                     <div className="flex items-center justify-between text-muted-foreground">
@@ -306,7 +318,7 @@ const CartDrawer = () => {
                       <span>
                         {shippingCost === 0
                           ? (lang === "ar" ? "مجاني" : "Free")
-                          : `${shippingCost.toLocaleString()} ${lang === "ar" ? "ج.م" : "EGP"}`}
+                          : formatMoney(shippingCost, lang)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between border-t border-border pt-2">
@@ -314,7 +326,7 @@ const CartDrawer = () => {
                         {lang === "ar" ? "الإجمالي" : "Total"}
                       </span>
                       <span className="font-display text-lg text-foreground">
-                        {grandTotal.toLocaleString()} {lang === "ar" ? "ج.م" : "EGP"}
+                        {formatMoney(grandTotal, lang)}
                       </span>
                     </div>
                   </div>
@@ -375,21 +387,21 @@ const CartDrawer = () => {
             <div className="space-y-1.5 rounded-lg bg-muted px-3 py-2.5 font-body text-sm">
               <div className="flex items-center justify-between text-muted-foreground">
                 <span>{lang === "ar" ? "المجموع الفرعي" : "Subtotal"}</span>
-                <span>{subtotal.toLocaleString()} {lang === "ar" ? "ج.م" : "EGP"}</span>
+                <span>{formatMoney(subtotal, lang)}</span>
               </div>
               {effectiveDiscount > 0 && (
                 <div className="flex items-center justify-between text-primary">
                   <span>{lang === "ar" ? `الخصم (${couponCode})` : `Discount (${couponCode})`}</span>
-                  <span>- {effectiveDiscount.toLocaleString()} {lang === "ar" ? "ج.م" : "EGP"}</span>
+                  <span>- {formatMoney(effectiveDiscount, lang)}</span>
                 </div>
               )}
               <div className="flex items-center justify-between text-muted-foreground">
                 <span>{lang === "ar" ? "الشحن" : "Shipping"}</span>
-                <span>{shippingCost === 0 ? (lang === "ar" ? "مجاني" : "Free") : `${shippingCost.toLocaleString()} ${lang === "ar" ? "ج.م" : "EGP"}`}</span>
+                <span>{shippingCost === 0 ? (lang === "ar" ? "مجاني" : "Free") : formatMoney(shippingCost, lang)}</span>
               </div>
               <div className="flex items-center justify-between border-t border-border pt-1.5">
                 <span className="text-muted-foreground">{lang === "ar" ? "الإجمالي:" : "Total:"}</span>
-                <span className="font-bold text-primary">{grandTotal.toLocaleString()} {lang === "ar" ? "ج.م" : "EGP"}</span>
+                <span className="font-bold text-primary">{formatMoney(grandTotal, lang)}</span>
               </div>
             </div>
           </div>
