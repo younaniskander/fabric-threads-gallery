@@ -14,6 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_modules: {
+        Row: {
+          config: Json
+          created_at: string
+          description: string | null
+          enabled: boolean
+          key: string
+          name: string
+          name_ar: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          key: string
+          name: string
+          name_ar: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          key?: string
+          name?: string
+          name_ar?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          entity: string | null
+          entity_id: string | null
+          id: string
+          ip: string | null
+          new_value: Json | null
+          old_value: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          ip?: string | null
+          new_value?: Json | null
+          old_value?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          entity?: string | null
+          entity_id?: string | null
+          id?: string
+          ip?: string | null
+          new_value?: Json | null
+          old_value?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      branches: {
+        Row: {
+          address: string | null
+          city: string | null
+          code: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          name_ar: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          code?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          name_ar?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          code?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          name_ar?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       brands: {
         Row: {
           created_at: string
@@ -179,6 +293,39 @@ export type Database = {
         }
         Relationships: []
       }
+      loyalty_rules: {
+        Row: {
+          award_on_status: string
+          enabled: boolean
+          id: string
+          min_redeem_points: number
+          point_value: number
+          points_expiry_days: number
+          points_per_currency: number
+          updated_at: string
+        }
+        Insert: {
+          award_on_status?: string
+          enabled?: boolean
+          id?: string
+          min_redeem_points?: number
+          point_value?: number
+          points_expiry_days?: number
+          points_per_currency?: number
+          updated_at?: string
+        }
+        Update: {
+          award_on_status?: string
+          enabled?: boolean
+          id?: string
+          min_redeem_points?: number
+          point_value?: number
+          points_expiry_days?: number
+          points_per_currency?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       loyalty_transactions: {
         Row: {
           created_at: string
@@ -203,6 +350,42 @@ export type Database = {
           reason?: string | null
           type?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      membership_levels: {
+        Row: {
+          color: string
+          created_at: string
+          discount_percent: number
+          id: string
+          key: string
+          min_points: number
+          name: string
+          name_ar: string
+          sort_order: number
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          key: string
+          min_points?: number
+          name: string
+          name_ar?: string
+          sort_order?: number
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          key?: string
+          min_points?: number
+          name?: string
+          name_ar?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -270,6 +453,7 @@ export type Database = {
       }
       orders: {
         Row: {
+          branch_id: string | null
           coupon_code: string | null
           created_at: string
           customer_address: string | null
@@ -278,7 +462,10 @@ export type Database = {
           discount_amount: number
           id: string
           items: Json
+          loyalty_settled: boolean
           notes: string | null
+          points_earned: number
+          points_redeemed: number
           shipping_amount: number
           status: string
           stripe_session_id: string | null
@@ -287,6 +474,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          branch_id?: string | null
           coupon_code?: string | null
           created_at?: string
           customer_address?: string | null
@@ -295,7 +483,10 @@ export type Database = {
           discount_amount?: number
           id?: string
           items?: Json
+          loyalty_settled?: boolean
           notes?: string | null
+          points_earned?: number
+          points_redeemed?: number
           shipping_amount?: number
           status?: string
           stripe_session_id?: string | null
@@ -304,6 +495,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          branch_id?: string | null
           coupon_code?: string | null
           created_at?: string
           customer_address?: string | null
@@ -312,7 +504,10 @@ export type Database = {
           discount_amount?: number
           id?: string
           items?: Json
+          loyalty_settled?: boolean
           notes?: string | null
+          points_earned?: number
+          points_redeemed?: number
           shipping_amount?: number
           status?: string
           stripe_session_id?: string | null
@@ -320,37 +515,158 @@ export type Database = {
           total_amount?: number
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "orders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      permissions: {
+        Row: {
+          category: string
+          key: string
+          name: string
+          name_ar: string
+        }
+        Insert: {
+          category?: string
+          key: string
+          name: string
+          name_ar?: string
+        }
+        Update: {
+          category?: string
+          key?: string
+          name?: string
+          name_ar?: string
+        }
         Relationships: []
+      }
+      pos_sales: {
+        Row: {
+          branch_id: string | null
+          cashier_id: string | null
+          created_at: string
+          customer_id: string | null
+          discount: number
+          id: string
+          items: Json
+          note: string | null
+          payment_method: string
+          payments: Json
+          points_earned: number
+          points_redeemed: number
+          receipt_no: string | null
+          related_sale_id: string | null
+          subtotal: number
+          total: number
+          type: string
+        }
+        Insert: {
+          branch_id?: string | null
+          cashier_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          discount?: number
+          id?: string
+          items?: Json
+          note?: string | null
+          payment_method?: string
+          payments?: Json
+          points_earned?: number
+          points_redeemed?: number
+          receipt_no?: string | null
+          related_sale_id?: string | null
+          subtotal?: number
+          total?: number
+          type?: string
+        }
+        Update: {
+          branch_id?: string | null
+          cashier_id?: string | null
+          created_at?: string
+          customer_id?: string | null
+          discount?: number
+          id?: string
+          items?: Json
+          note?: string | null
+          payment_method?: string
+          payments?: Json
+          points_earned?: number
+          points_redeemed?: number
+          receipt_no?: string | null
+          related_sale_id?: string | null
+          subtotal?: number
+          total?: number
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_sales_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_sales_related_sale_id_fkey"
+            columns: ["related_sale_id"]
+            isOneToOne: false
+            referencedRelation: "pos_sales"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
           avatar_url: string | null
+          branch_id: string | null
           created_at: string
           full_name: string
           id: string
+          loyalty_card_token: string
           loyalty_points: number
+          membership_level: string
           phone: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
+          branch_id?: string | null
           created_at?: string
           full_name?: string
           id: string
+          loyalty_card_token?: string
           loyalty_points?: number
+          membership_level?: string
           phone?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
+          branch_id?: string | null
           created_at?: string
           full_name?: string
           id?: string
+          loyalty_card_token?: string
           loyalty_points?: number
+          membership_level?: string
           phone?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {
@@ -392,6 +708,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      role_permissions: {
+        Row: {
+          id: string
+          permission_key: string
+          role_key: string
+        }
+        Insert: {
+          id?: string
+          permission_key: string
+          role_key: string
+        }
+        Update: {
+          id?: string
+          permission_key?: string
+          role_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_permissions_permission_key_fkey"
+            columns: ["permission_key"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "role_permissions_role_key_fkey"
+            columns: ["role_key"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      roles: {
+        Row: {
+          created_at: string
+          description: string | null
+          is_system: boolean
+          key: string
+          name: string
+          name_ar: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          is_system?: boolean
+          key: string
+          name: string
+          name_ar?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          is_system?: boolean
+          key?: string
+          name?: string
+          name_ar?: string
+        }
+        Relationships: []
       }
       shipping_settings: {
         Row: {
@@ -444,6 +820,45 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_assignments: {
+        Row: {
+          branch_id: string | null
+          created_at: string
+          id: string
+          role_key: string
+          user_id: string
+        }
+        Insert: {
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          role_key: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string | null
+          created_at?: string
+          id?: string
+          role_key?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_assignments_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "staff_assignments_role_key_fkey"
+            columns: ["role_key"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -488,6 +903,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_membership_level: { Args: { _points: number }; Returns: string }
+      has_permission: {
+        Args: { _perm: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
