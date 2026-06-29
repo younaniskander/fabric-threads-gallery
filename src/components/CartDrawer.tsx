@@ -306,8 +306,8 @@ const CartDrawer = () => {
             <Button variant="outline" onClick={() => setShowForm(false)} className="font-body">
               {lang === "ar" ? "إلغاء" : "Cancel"}
             </Button>
-            <Button onClick={submitOrder} disabled={loading} className="font-body">
-              {loading ? (lang === "ar" ? "جاري الإرسال..." : "Sending...") : (lang === "ar" ? "تأكيد الطلب" : "Confirm Order")}
+            <Button onClick={submitOrder} disabled={loading} className="font-body gap-2">
+              {loading ? (lang === "ar" ? "جاري الإرسال..." : "Sending...") : (lang === "ar" ? "تأكيد الطلب عبر واتساب" : "Confirm via WhatsApp")}
             </Button>
           </DialogFooter>
         </DialogContent>
