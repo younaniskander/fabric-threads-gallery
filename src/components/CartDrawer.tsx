@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import PhoneField from "@/components/PhoneField";
 import { formatMoney, parsePriceAmount, isValidCustomerName, isValidPhone, isValidAddress } from "@/lib/phoneAuth";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
@@ -278,7 +279,7 @@ const CartDrawer = () => {
             </div>
             <div>
               <Label className="font-body text-sm">{lang === "ar" ? "رقم الهاتف *" : "Phone *"}</Label>
-              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} dir="ltr" />
+              <PhoneField value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} placeholder={lang === "ar" ? "رقم الهاتف" : "Phone number"} />
             </div>
             <div>
               <Label className="font-body text-sm">{lang === "ar" ? "العنوان بالتفصيل *" : "Address *"}</Label>
