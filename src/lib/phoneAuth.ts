@@ -45,12 +45,17 @@ export function isValidPhone(phone: string) {
   return digitCount >= 7 && digitCount <= 15;
 }
 
-export function phoneToAuthCredentials(phone: string) {
+function normalizeNameForAuth(name: string) {
+  return name.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
+export function phoneToAuthCredentials(phone: string, name: string) {
   const normalized = normalizePhone(phone);
   const digits = normalized.replace(/\D/g, "");
+  const normalizedName = normalizeNameForAuth(name);
   return {
     email: `phone-${digits}@${AUTH_DOMAIN}`,
-    password: `${PASSWORD_PREFIX}-${digits}`,
+    password: `${PASSWORD_PREFIX}-${digits}-${encodeURIComponent(normalizedName)}`,
     normalizedPhone: normalized,
   };
 }
