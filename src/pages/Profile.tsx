@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare, Gift } from "lucide-react";
+import { User as UserIcon, Package, Heart, LogOut, Edit2, Save, Inbox, MessageSquare, Gift, Wallet } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -9,11 +9,12 @@ import { useFabrics } from "@/hooks/useFabrics";
 import FabricCard from "@/components/FabricCard";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LoyaltyCard from "@/components/LoyaltyCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-type Tab = "profile" | "orders" | "loyalty" | "inbox" | "wishlist";
+type Tab = "profile" | "card" | "orders" | "loyalty" | "inbox" | "wishlist";
 
 const Profile = () => {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -24,6 +25,9 @@ const Profile = () => {
   const [editing, setEditing] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [points, setPoints] = useState(0);
+  const [cardToken, setCardToken] = useState("");
+  const [level, setLevel] = useState("bronze");
+  const [levels, setLevels] = useState<any[]>([]);
   const [loyaltyTx, setLoyaltyTx] = useState<any[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [myMessages, setMyMessages] = useState<any[]>([]);
@@ -39,11 +43,17 @@ const Profile = () => {
   useEffect(() => {
     if (!user) return;
     // Load profile
-    supabase.from("profiles").select("full_name, phone, loyalty_points").eq("id", user.id).maybeSingle().then(({ data }) => {
+    supabase.from("profiles").select("full_name, phone, loyalty_points, loyalty_card_token, membership_level").eq("id", user.id).maybeSingle().then(({ data }) => {
       if (data) {
         setProfile({ full_name: data.full_name || "", phone: data.phone || "" });
         setPoints((data as any).loyalty_points || 0);
+        setCardToken((data as any).loyalty_card_token || "");
+        setLevel((data as any).membership_level || "bronze");
       }
+    });
+    // Load membership levels
+    supabase.from("membership_levels").select("*").order("sort_order").then(({ data }) => {
+      if (data) setLevels(data);
     });
     // Load loyalty transactions
     supabase.from("loyalty_transactions").select("*").eq("user_id", user.id).order("created_at", { ascending: false }).then(({ data }) => {
