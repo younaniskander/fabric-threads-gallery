@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import GlassThemeToggle from "@/components/GlassThemeToggle";
+import NotificationBell from "@/components/NotificationBell";
 import { useTheme } from "@/contexts/ThemeContext";
 import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new-white.png";
@@ -282,6 +283,13 @@ const Navbar = () => {
                 </AnimatePresence>
               </div>
             </div>
+
+            {/* Notifications */}
+            {user && (
+              <div className="hidden md:block">
+                <NotificationBell />
+              </div>
+            )}
 
             {/* User */}
             <Link

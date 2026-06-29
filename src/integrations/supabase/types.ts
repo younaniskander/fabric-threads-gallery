@@ -89,6 +89,51 @@ export type Database = {
         }
         Relationships: []
       }
+      branch_inventory: {
+        Row: {
+          branch_id: string
+          created_at: string
+          fabric_id: string
+          id: string
+          low_stock_threshold: number
+          quantity: number
+          updated_at: string
+        }
+        Insert: {
+          branch_id: string
+          created_at?: string
+          fabric_id: string
+          id?: string
+          low_stock_threshold?: number
+          quantity?: number
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string
+          created_at?: string
+          fabric_id?: string
+          id?: string
+          low_stock_threshold?: number
+          quantity?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branch_inventory_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "branch_inventory_fabric_id_fkey"
+            columns: ["fabric_id"]
+            isOneToOne: false
+            referencedRelation: "fabrics_db"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       branches: {
         Row: {
           address: string | null
@@ -146,16 +191,47 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_redemptions: {
+        Row: {
+          coupon_code: string
+          created_at: string
+          discount: number
+          id: string
+          order_id: string | null
+          user_id: string
+        }
+        Insert: {
+          coupon_code: string
+          created_at?: string
+          discount?: number
+          id?: string
+          order_id?: string | null
+          user_id: string
+        }
+        Update: {
+          coupon_code?: string
+          created_at?: string
+          discount?: number
+          id?: string
+          order_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       coupons: {
         Row: {
           code: string
           created_at: string
+          description: string
           discount_type: string
           discount_value: number
           expires_at: string | null
           id: string
           is_active: boolean
           min_order: number
+          per_user_limit: number | null
+          segment_key: string | null
+          starts_at: string | null
           updated_at: string
           usage_limit: number | null
           used_count: number
@@ -163,12 +239,16 @@ export type Database = {
         Insert: {
           code: string
           created_at?: string
+          description?: string
           discount_type?: string
           discount_value?: number
           expires_at?: string | null
           id?: string
           is_active?: boolean
           min_order?: number
+          per_user_limit?: number | null
+          segment_key?: string | null
+          starts_at?: string | null
           updated_at?: string
           usage_limit?: number | null
           used_count?: number
@@ -176,15 +256,67 @@ export type Database = {
         Update: {
           code?: string
           created_at?: string
+          description?: string
           discount_type?: string
           discount_value?: number
           expires_at?: string | null
           id?: string
           is_active?: boolean
           min_order?: number
+          per_user_limit?: number | null
+          segment_key?: string | null
+          starts_at?: string | null
           updated_at?: string
           usage_limit?: number | null
           used_count?: number
+        }
+        Relationships: []
+      }
+      customer_segments: {
+        Row: {
+          color: string
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          key: string
+          max_value: number | null
+          min_value: number
+          name: string
+          name_ar: string
+          rule_type: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          key: string
+          max_value?: number | null
+          min_value?: number
+          name: string
+          name_ar?: string
+          rule_type?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          max_value?: number | null
+          min_value?: number
+          name?: string
+          name_ar?: string
+          rule_type?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -448,6 +580,42 @@ export type Database = {
           name?: string
           phone?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          is_read: boolean
+          link: string | null
+          title: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          title: string
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          title?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -877,6 +1045,75 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_logs: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          phone: string
+          status: string
+          template_key: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string
+          phone?: string
+          status?: string
+          template_key?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          phone?: string
+          status?: string
+          template_key?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      whatsapp_templates: {
+        Row: {
+          body_ar: string
+          body_en: string
+          created_at: string
+          enabled: boolean
+          id: string
+          key: string
+          name: string
+          name_ar: string
+          trigger_event: string
+          updated_at: string
+        }
+        Insert: {
+          body_ar?: string
+          body_en?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          key: string
+          name: string
+          name_ar?: string
+          trigger_event?: string
+          updated_at?: string
+        }
+        Update: {
+          body_ar?: string
+          body_en?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          key?: string
+          name?: string
+          name_ar?: string
+          trigger_event?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       wishlist: {
         Row: {
           created_at: string
@@ -915,8 +1152,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      user_in_segment: {
+        Args: { _segment_key: string; _user_id: string }
+        Returns: boolean
+      }
       validate_coupon: {
         Args: { _code: string; _subtotal: number }
+        Returns: {
+          discount: number
+          message: string
+          valid: boolean
+        }[]
+      }
+      validate_coupon_for_user: {
+        Args: { _code: string; _subtotal: number; _user_id: string }
         Returns: {
           discount: number
           message: string
