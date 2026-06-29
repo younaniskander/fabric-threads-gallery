@@ -223,68 +223,10 @@ const CartDrawer = () => {
 
               {items.length > 0 && (
                 <div className="border-t border-border px-4 py-4 space-y-3">
-                  {/* Free shipping progress */}
-                  {shipping.enabled && (
-                    <div className="rounded-lg bg-muted px-3 py-2">
-                      <p className="flex items-center gap-1.5 font-body text-xs text-muted-foreground">
-                        <Truck size={14} className="text-primary" />
-                        {shippingCost === 0
-                          ? (lang === "ar" ? "مبروك! حصلت على شحن مجاني" : "You've got free shipping!")
-                          : lang === "ar"
-                          ? `أضف ${formatMoney(remainingForFreeShip, lang)} للحصول على شحن مجاني`
-                          : `Add ${formatMoney(remainingForFreeShip, lang)} for free shipping`}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Coupon */}
-                  {couponCode ? (
-                    <div className="flex items-center justify-between rounded-lg border border-primary/40 bg-primary/5 px-3 py-2">
-                      <span className="flex items-center gap-1.5 font-body text-sm text-primary">
-                        <Check size={14} /> {couponCode}
-                      </span>
-                      <button onClick={removeCoupon} className="text-xs text-muted-foreground hover:text-destructive">
-                        {lang === "ar" ? "إزالة" : "Remove"}
-                      </button>
-                    </div>
-                  ) : (
-                    <div>
-                      <div className="flex gap-2">
-                        <Input
-                          value={couponInput}
-                          onChange={(e) => setCouponInput(e.target.value)}
-                          placeholder={lang === "ar" ? "كود الخصم" : "Discount code"}
-                          className="h-9 font-body"
-                        />
-                        <Button onClick={applyCoupon} disabled={validating} variant="outline" className="h-9 gap-1 font-body">
-                          <Tag size={14} />
-                          {validating ? "..." : lang === "ar" ? "تطبيق" : "Apply"}
-                        </Button>
-                      </div>
-                      {couponMsg && (
-                        <p className="mt-1 font-body text-xs text-muted-foreground">{couponMsg}</p>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="space-y-1.5 border-t border-border pt-3 font-body text-sm">
+                  <div className="space-y-1.5 font-body text-sm">
                     <div className="flex items-center justify-between text-muted-foreground">
                       <span>{lang === "ar" ? "المجموع الفرعي" : "Subtotal"}</span>
                       <span>{formatMoney(subtotal, lang)}</span>
-                    </div>
-                    {effectiveDiscount > 0 && (
-                      <div className="flex items-center justify-between text-primary">
-                        <span>{lang === "ar" ? "الخصم" : "Discount"}</span>
-                        <span>- {formatMoney(effectiveDiscount, lang)}</span>
-                      </div>
-                    )}
-                    <div className="flex items-center justify-between text-muted-foreground">
-                      <span>{lang === "ar" ? "الشحن" : "Shipping"}</span>
-                      <span>
-                        {shippingCost === 0
-                          ? (lang === "ar" ? "مجاني" : "Free")
-                          : formatMoney(shippingCost, lang)}
-                      </span>
                     </div>
                     <div className="flex items-center justify-between border-t border-border pt-2">
                       <span className="font-body text-sm text-muted-foreground">
