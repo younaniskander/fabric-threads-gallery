@@ -1,3 +1,5 @@
+import { isValidPhoneNumber } from "libphonenumber-js";
+
 const AUTH_DOMAIN = "adam-phone.local";
 const PASSWORD_PREFIX = "ADAM-phone-login-v1";
 
@@ -45,13 +47,13 @@ export function isValidCustomerName(name: string) {
 }
 
 export function isValidPhone(phone: string) {
-  return isValidEgyptPhone(phone);
-}
-
-export function isValidEgyptPhone(phone: string) {
-  const digits = normalizePhone(phone).replace(/\D/g, "");
-  // Egyptian mobile: 11 digits starting with 010 / 011 / 012 / 015.
-  return /^01[0125]\d{8}$/.test(digits);
+  // Accepts any valid international number (E.164, e.g. +201013640361).
+  const value = toLatinDigits(phone).trim();
+  try {
+    return isValidPhoneNumber(value);
+  } catch {
+    return false;
+  }
 }
 
 export function isValidAddress(address: string) {
