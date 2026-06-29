@@ -394,9 +394,11 @@ const Navbar = () => {
                 {activeLinks.map((link) => (
                   <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-2 text-sm text-foreground"
+                    className="group flex items-center gap-3 py-2 text-sm text-foreground"
                   >
-                    <span>{platformIcons[link.platform] || "🔗"}</span>
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                      <SocialIcon platform={link.platform} className="h-4 w-4" />
+                    </span>
                     {platformLabels[link.platform]?.[lang] || link.platform}
                   </a>
                 ))}
