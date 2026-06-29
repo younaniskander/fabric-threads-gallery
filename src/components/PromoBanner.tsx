@@ -7,18 +7,16 @@ const PromoBanner = () => {
   const items =
     lang === "ar"
       ? [
-          { icon: Truck, text: "شحن مجاني للطلبات فوق 2000 جنيه" },
-          { icon: Tag, text: "خصومات موسمية تصل إلى 25%" },
+          { icon: Tag, text: "عروض وخصومات جديدة باستمرار" },
           { icon: Clock, text: "عروض لفترة محدودة على المخمل الفاخر" },
           { icon: Sparkles, text: "وصل حديثاً: أحدث تشكيلات الأقمشة" },
-          { icon: MessageCircle, text: "استفسر عبر واتساب عن تشكيلاتنا" },
+          { icon: MessageCircle, text: "اطلب وتواصل معنا مباشرة عبر واتساب" },
         ]
       : [
-          { icon: Truck, text: "Free shipping on orders over 2000 EGP" },
-          { icon: Tag, text: "Seasonal discounts up to 25%" },
+          { icon: Tag, text: "New offers & discounts all the time" },
           { icon: Clock, text: "Limited-time offers on premium velvet" },
           { icon: Sparkles, text: "New arrivals: latest fabric collections" },
-          { icon: MessageCircle, text: "Ask on WhatsApp about our collections" },
+          { icon: MessageCircle, text: "Order & chat with us directly on WhatsApp" },
         ];
 
   const loop = [...items, ...items];
