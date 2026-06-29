@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mail, Lock, User as UserIcon } from "lucide-react";
+import { Phone, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { isValidCustomerName, isValidPhone, phoneToAuthCredentials } from "@/lib/phoneAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import adamLogoLight from "@/assets/adam-logo-new.png";
@@ -17,9 +19,8 @@ import { useTheme } from "@/contexts/ThemeContext";
 const Auth = () => {
   const { theme } = useTheme();
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
   const { lang } = useLanguage();
@@ -27,23 +28,47 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedName = fullName.trim();
+
+    if (!isValidCustomerName(trimmedName)) {
+      toast.error(lang === "ar" ? "اكتب الاسم بشكل صحيح" : "Please enter a valid name");
+      return;
+    }
+
+    if (!isValidPhone(phone)) {
+      toast.error(lang === "ar" ? "اكتب رقم الهاتف بشكل صحيح" : "Please enter a valid phone number");
+      return;
+    }
+
+    const credentials = phoneToAuthCredentials(phone);
     setLoading(true);
 
     if (mode === "signup") {
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(credentials.email, credentials.password, trimmedName, credentials.normalizedPhone);
       setLoading(false);
       if (error) {
-        toast.error(lang === "ar" ? "خطأ في التسجيل" : "Sign up error", { description: error.message });
+        toast.error(lang === "ar" ? "تعذر إنشاء الحساب" : "Sign up error", {
+          description: lang === "ar" ? "لو الرقم مسجل قبل كده جرّب تسجيل الدخول" : "If this phone is already registered, try signing in",
+        });
         return;
       }
       toast.success(lang === "ar" ? "تم إنشاء الحساب بنجاح!" : "Account created successfully!");
       navigate("/profile");
     } else {
-      const { error } = await signIn(email, password);
+      const { error } = await signIn(credentials.email, credentials.password);
       setLoading(false);
       if (error) {
-        toast.error(lang === "ar" ? "خطأ في الدخول" : "Login error", { description: error.message });
+        toast.error(lang === "ar" ? "الرقم غير مسجل" : "Phone not registered", {
+          description: lang === "ar" ? "أنشئ حساب جديد بنفس الاسم ورقم الهاتف" : "Create a new account with your name and phone",
+        });
         return;
+      }
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
+        await supabase
+          .from("profiles")
+          .update({ full_name: trimmedName, phone: credentials.normalizedPhone, updated_at: new Date().toISOString() })
+          .eq("id", data.user.id);
       }
       navigate("/profile");
     }
@@ -68,25 +93,17 @@ const Auth = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {mode === "signup" && (
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 font-body text-sm">
-                  <UserIcon size={16} /> {lang === "ar" ? "الاسم الكامل" : "Full Name"}
-                </Label>
-                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-              </div>
-            )}
             <div className="space-y-2">
               <Label className="flex items-center gap-2 font-body text-sm">
-                <Mail size={16} /> {lang === "ar" ? "البريد الإلكتروني" : "Email"}
+                <UserIcon size={16} /> {lang === "ar" ? "الاسم الكامل" : "Full name"}
               </Label>
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} dir="ltr" required />
+              <Input value={fullName} onChange={(e) => setFullName(e.target.value)} maxLength={100} required />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-2 font-body text-sm">
-                <Lock size={16} /> {lang === "ar" ? "كلمة المرور" : "Password"}
+                <Phone size={16} /> {lang === "ar" ? "رقم الهاتف" : "Phone number"}
               </Label>
-              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} dir="ltr" required />
+              <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} dir="ltr" maxLength={20} required />
             </div>
             <Button type="submit" disabled={loading} className="w-full font-body font-semibold">
               {loading
