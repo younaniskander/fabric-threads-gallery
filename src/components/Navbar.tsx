@@ -245,28 +245,38 @@ const Navbar = () => {
                 <AnimatePresence>
                   {contactDropdownOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -5 }}
-                      className="absolute end-0 top-full mt-2 w-48 rounded-xl border border-border bg-card p-2 shadow-lg"
+                      initial={{ opacity: 0, y: -5, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -5, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute end-0 top-full mt-2 w-56 rounded-xl border border-border bg-card p-2 shadow-lg"
                     >
-                      {activeLinks.map((link) => (
-                        <a
-                          key={link.id} href={link.url} target="_blank" rel="noopener noreferrer"
-                          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
-                          onClick={() => setContactDropdownOpen(false)}
-                        >
-                          <span>{platformIcons[link.platform] || "🔗"}</span>
-                          {platformLabels[link.platform]?.[lang] || link.platform}
-                        </a>
-                      ))}
-                      {soonLinks.map((link) => (
-                        <div key={link.id} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground cursor-default">
-                          <span>{platformIcons[link.platform] || "🔗"}</span>
-                          {platformLabels[link.platform]?.[lang] || link.platform}
-                          <span className="ms-auto text-xs bg-muted px-1.5 py-0.5 rounded">{lang === "ar" ? "قريباً" : "Soon"}</span>
-                        </div>
-                      ))}
+                      <p className="px-3 py-1.5 text-xs font-body text-muted-foreground">
+                        {lang === "ar" ? "تابعنا على" : "Follow us on"}
+                      </p>
+                      <div className="grid gap-1">
+                        {activeLinks.map((link) => (
+                          <a
+                            key={link.id} href={link.url} target="_blank" rel="noopener noreferrer"
+                            className="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-muted"
+                            onClick={() => setContactDropdownOpen(false)}
+                          >
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                              <SocialIcon platform={link.platform} className="h-4 w-4" />
+                            </span>
+                            {platformLabels[link.platform]?.[lang] || link.platform}
+                          </a>
+                        ))}
+                        {soonLinks.map((link) => (
+                          <div key={link.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-muted-foreground cursor-default">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted/50 text-muted-foreground">
+                              <SocialIcon platform={link.platform} className="h-4 w-4" />
+                            </span>
+                            <span className="flex-1">{platformLabels[link.platform]?.[lang] || link.platform}</span>
+                            <span className="text-xs bg-muted px-1.5 py-0.5 rounded">{lang === "ar" ? "قريباً" : "Soon"}</span>
+                          </div>
+                        ))}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
