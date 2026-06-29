@@ -84,6 +84,10 @@ const Pos = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (!permLoading && !user) navigate("/auth");
+  }, [permLoading, user, navigate]);
+
   // product search debounce
   useEffect(() => {
     if (pq.trim().length < 1) { setResults([]); return; }
@@ -299,7 +303,7 @@ const Pos = () => {
   };
 
   if (permLoading) return <div className="grid min-h-screen place-items-center font-body text-muted-foreground">جاري التحقق...</div>;
-  if (!user) { navigate("/auth"); return null; }
+  if (!user) return null;
   if (!can("pos.use")) {
     return (
       <div className="grid min-h-screen place-items-center bg-muted p-6 text-center" dir="rtl">
