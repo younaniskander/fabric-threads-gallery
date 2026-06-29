@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import mascotHappy from "@/assets/adam-logo-new.png";
 import Seo from "@/components/Seo";
-import { isValidCustomerName, isValidEgyptPhone } from "@/lib/phoneAuth";
+import { isValidCustomerName, isValidPhone } from "@/lib/phoneAuth";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -36,8 +36,8 @@ const Register = () => {
       toast({ title: "خطأ", description: "اكتب الاسم ثنائي (الاسم الأول واسم العائلة)", variant: "destructive" });
       return;
     }
-    if (!isValidEgyptPhone(trimmedPhone)) {
-      toast({ title: "خطأ", description: "اكتب رقم موبايل صحيح مكوّن من 11 رقم", variant: "destructive" });
+    if (!isValidPhone(trimmedPhone)) {
+      toast({ title: "خطأ", description: "اختر الدولة واكتب رقم هاتف صحيح", variant: "destructive" });
       return;
     }
 
