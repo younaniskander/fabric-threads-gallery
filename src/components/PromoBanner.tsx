@@ -1,5 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Truck, Tag, Clock, MessageCircle, Sparkles } from "lucide-react";
+import { Tag, Clock, MessageCircle, Sparkles } from "lucide-react";
 
 const PromoBanner = () => {
   const { lang } = useLanguage();
