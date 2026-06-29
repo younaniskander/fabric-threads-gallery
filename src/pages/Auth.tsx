@@ -31,12 +31,12 @@ const Auth = () => {
     const trimmedName = fullName.trim();
 
     if (!isValidCustomerName(trimmedName)) {
-      toast.error(lang === "ar" ? "اكتب الاسم بشكل صحيح" : "Please enter a valid name");
+      toast.error(lang === "ar" ? "اكتب الاسم ثنائي (الاسم الأول واسم العائلة)" : "Enter your full name (first and last)");
       return;
     }
 
     if (!isValidPhone(phone)) {
-      toast.error(lang === "ar" ? "اكتب رقم الهاتف بشكل صحيح" : "Please enter a valid phone number");
+      toast.error(lang === "ar" ? "اكتب رقم موبايل صحيح مكوّن من 11 رقم" : "Enter a valid 11-digit mobile number");
       return;
     }
 

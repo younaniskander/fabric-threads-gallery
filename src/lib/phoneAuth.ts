@@ -36,13 +36,28 @@ export function normalizePhone(value: string) {
 
 export function isValidCustomerName(name: string) {
   const trimmed = name.trim();
-  return trimmed.length >= 2 && trimmed.length <= 100;
+  if (trimmed.length < 4 || trimmed.length > 100) return false;
+  // Require at least two words (first + last), each word at least 2 letters.
+  const words = trimmed.split(/\s+/).filter((w) => w.length >= 2);
+  if (words.length < 2) return false;
+  // Only letters (Arabic/Latin) and spaces are allowed.
+  return /^[\p{L}\s]+$/u.test(trimmed);
 }
 
 export function isValidPhone(phone: string) {
-  const normalized = normalizePhone(phone);
-  const digitCount = normalized.replace(/\D/g, "").length;
-  return digitCount >= 7 && digitCount <= 15;
+  return isValidEgyptPhone(phone);
+}
+
+export function isValidEgyptPhone(phone: string) {
+  const digits = normalizePhone(phone).replace(/\D/g, "");
+  // Egyptian mobile: 11 digits starting with 010 / 011 / 012 / 015.
+  return /^01[0125]\d{8}$/.test(digits);
+}
+
+export function isValidAddress(address: string) {
+  const trimmed = address.trim();
+  // A real address: enough length and contains some letters (not just digits).
+  return trimmed.length >= 10 && /[\p{L}]/u.test(trimmed);
 }
 
 function normalizeNameForAuth(name: string) {

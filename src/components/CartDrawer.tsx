@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { formatMoney, parsePriceAmount } from "@/lib/phoneAuth";
+import { formatMoney, parsePriceAmount, isValidCustomerName, isValidEgyptPhone, isValidAddress } from "@/lib/phoneAuth";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 const CartDrawer = () => {
@@ -88,8 +88,16 @@ const CartDrawer = () => {
 
   const submitOrder = async () => {
     if (!user) return;
-    if (!form.name.trim() || !form.phone.trim() || !form.address.trim()) {
-      toast.error(lang === "ar" ? "يرجى ملء كل البيانات المطلوبة" : "Please fill all required fields");
+    if (!isValidCustomerName(form.name)) {
+      toast.error(lang === "ar" ? "اكتب الاسم ثنائي (الاسم الأول واسم العائلة)" : "Enter your full name (first and last)");
+      return;
+    }
+    if (!isValidEgyptPhone(form.phone)) {
+      toast.error(lang === "ar" ? "اكتب رقم موبايل صحيح مكوّن من 11 رقم" : "Enter a valid 11-digit mobile number");
+      return;
+    }
+    if (!isValidAddress(form.address)) {
+      toast.error(lang === "ar" ? "اكتب العنوان بالتفصيل (المحافظة والمدينة والشارع)" : "Enter a detailed address");
       return;
     }
     setLoading(true);
