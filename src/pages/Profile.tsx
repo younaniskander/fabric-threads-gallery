@@ -107,7 +107,7 @@ const Profile = () => {
           {/* Sidebar */}
           <div className="w-full md:w-64 shrink-0">
             <div className="bg-card border border-border rounded-xl p-5 space-y-2">
-              <p className="font-display text-lg text-foreground mb-4">{profile.full_name || user.email}</p>
+              <p className="font-display text-lg text-foreground mb-4">{profile.full_name || profile.phone}</p>
               {tabs.map((t) => (
                 <button
                   key={t.id}
@@ -148,10 +148,6 @@ const Profile = () => {
                     )}
                   </div>
                   <div className="space-y-4 max-w-md">
-                    <div>
-                      <label className="text-xs text-muted-foreground font-body block mb-1">{lang === "ar" ? "البريد الإلكتروني" : "Email"}</label>
-                      <Input value={user.email || ""} disabled dir="ltr" />
-                    </div>
                     <div>
                       <label className="text-xs text-muted-foreground font-body block mb-1">{lang === "ar" ? "الاسم" : "Name"}</label>
                       <Input value={profile.full_name} onChange={(e) => setProfile({ ...profile, full_name: e.target.value })} disabled={!editing} />
