@@ -40,7 +40,7 @@ const Auth = () => {
       return;
     }
 
-    const credentials = phoneToAuthCredentials(phone);
+    const credentials = phoneToAuthCredentials(phone, trimmedName);
     setLoading(true);
 
     if (mode === "signup") {
