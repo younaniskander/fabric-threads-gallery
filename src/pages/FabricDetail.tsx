@@ -269,6 +269,9 @@ const FabricDetail = () => {
 
         {/* Reviews */}
         <ReviewsSection fabricId={fabric.id} />
+
+        {/* Smart recommendations */}
+        <RecommendedFabrics currentId={fabric.id} category={fabric.category} brand={fabric.brand} />
       </div>
 
       <Footer />
