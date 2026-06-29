@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import PhoneField from "@/components/PhoneField";
-import { formatMoney, parsePriceAmount, isValidCustomerName, isValidPhone, isValidAddress } from "@/lib/phoneAuth";
+import { formatMoney, parsePriceAmount, isValidCustomerName, isValidPhone, isValidAddress, toE164Phone, formatPhoneForMessage } from "@/lib/phoneAuth";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 const CartDrawer = () => {
@@ -43,7 +43,7 @@ const CartDrawer = () => {
       return (
         `🛍️ طلب جديد من آدم للأقمشة\n\n` +
         `👤 الاسم: ${form.name.trim()}\n` +
-        `📞 رقم الهاتف: ${form.phone.trim()}\n` +
+        `📞 رقم الهاتف: ${formatPhoneForMessage(form.phone)}\n` +
         `📍 العنوان: ${form.address.trim()}\n` +
         (form.notes.trim() ? `📝 ملاحظات: ${form.notes.trim()}\n` : "") +
         `\n🧾 المنتجات:\n${lines}\n\n` +
@@ -54,7 +54,7 @@ const CartDrawer = () => {
     return (
       `🛍️ New order from ADAM Fabrics\n\n` +
       `👤 Name: ${form.name.trim()}\n` +
-      `📞 Phone: ${form.phone.trim()}\n` +
+      `📞 Phone: ${formatPhoneForMessage(form.phone)}\n` +
       `📍 Address: ${form.address.trim()}\n` +
       (form.notes.trim() ? `📝 Notes: ${form.notes.trim()}\n` : "") +
       `\n🧾 Items:\n${lines}\n\n` +
@@ -118,7 +118,7 @@ const CartDrawer = () => {
         total_amount: grandTotal,
         status: "pending",
         customer_name: form.name.trim(),
-        customer_phone: form.phone.trim(),
+        customer_phone: toE164Phone(form.phone),
         customer_address: form.address.trim(),
         notes: form.notes.trim() || null,
       });

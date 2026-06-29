@@ -1,4 +1,4 @@
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isValidPhoneNumber, parsePhoneNumberFromString } from "libphonenumber-js";
 
 const AUTH_DOMAIN = "adam-phone.local";
 const PASSWORD_PREFIX = "ADAM-phone-login-v1";
@@ -54,6 +54,40 @@ export function isValidPhone(phone: string) {
   } catch {
     return false;
   }
+}
+
+/**
+ * Return the full phone number in canonical E.164 form (e.g. +201013640361).
+ * Falls back to a normalized value if parsing fails, so we never silently
+ * drop the country code or digits.
+ */
+export function toE164Phone(phone: string) {
+  const value = toLatinDigits(phone).trim();
+  try {
+    const parsed = parsePhoneNumberFromString(value);
+    if (parsed && parsed.isValid()) return parsed.number; // E.164, e.g. +20101...
+  } catch {
+    /* ignore */
+  }
+  return normalizePhone(value);
+}
+
+/**
+ * Human-friendly international format (e.g. +20 101 364 0361) wrapped in
+ * left-to-right marks so it never gets reversed inside Arabic/RTL text such
+ * as a WhatsApp order message.
+ */
+export function formatPhoneForMessage(phone: string) {
+  const value = toLatinDigits(phone).trim();
+  let display = value;
+  try {
+    const parsed = parsePhoneNumberFromString(value);
+    if (parsed && parsed.isValid()) display = parsed.formatInternational();
+  } catch {
+    /* ignore */
+  }
+  // U+2066 LRI ... U+2069 PDI keeps the number rendering left-to-right.
+  return `\u2066${display}\u2069`;
 }
 
 export function isValidAddress(address: string) {
