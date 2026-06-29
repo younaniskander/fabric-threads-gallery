@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { fabrics as staticFabrics, type Fabric } from "@/data/fabrics";
+import { parsePriceAmount } from "@/lib/phoneAuth";
 
 function mapRow(row: any): Fabric {
   const colors: string[] = Array.isArray(row.colors) ? row.colors : [];
@@ -18,6 +19,7 @@ function mapRow(row: any): Fabric {
     origin: row.origin || "",
     composition: row.composition || "",
     price: row.price || "",
+    priceNum: parsePriceAmount(row.price),
     features: row.features || [],
     usage: row.usage_suggestions || [],
     isFeatured: !!row.is_featured,
