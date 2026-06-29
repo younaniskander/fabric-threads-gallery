@@ -86,8 +86,14 @@ const Footer = () => {
                 <span>📞</span>
                 <span dir="ltr">{WHATSAPP_NUMBER_LOCAL}</span>
               </a>
-              <span>✉️ info@adamfabrics.com</span>
-              <span>📍 {lang === "ar" ? "القاهرة، مصر" : "Cairo, Egypt"}</span>
+              <span className="flex items-start justify-center gap-2 md:justify-start">
+                <span>📍</span>
+                <span>
+                  {lang === "ar"
+                    ? "فروعنا في دسوق وكفر الشيخ / چيم الغامري بجوار كافيه راديو"
+                    : "Our branches in Desouk & Kafr El-Sheikh / Gym El-Ghamry next to Radio Café"}
+                </span>
+              </span>
             </div>
           </div>
         </div>
