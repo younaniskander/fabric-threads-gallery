@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, CheckCircle2, XCircle, Phone, MapPin, User, Package } from "lucide-react";
+import { Clock, CheckCircle2, XCircle, Phone, MapPin, User, Package, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 type Order = {
@@ -28,8 +28,17 @@ const STATUS_TABS: { id: StatusKey; label: string; icon: any; color: string }[] 
 ];
 
 function fmtDate(iso: string) {
-  const d = new Date(iso);
-  return d.toLocaleDateString("ar-EG", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  return new Date(iso).toLocaleDateString("ar-EG");
+}
+
+function customerWhatsAppLink(phone: string | null, name: string | null) {
+  if (!phone) return null;
+  let digits = phone.replace(/\D/g, "");
+  if (digits.startsWith("00")) digits = digits.slice(2);
+  else if (digits.startsWith("0")) digits = "20" + digits.slice(1);
+  if (!digits.startsWith("20") && digits.length === 10) digits = "20" + digits;
+  const msg = `مرحباً ${name || ""}، بخصوص طلبك من آدم للأقمشة 🛍️`;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`;
 }
 function fmtTime(iso: string) {
   return new Date(iso).toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" });
@@ -152,6 +161,16 @@ const OrdersSection = () => {
                             <a href={`tel:${o.customer_phone || ""}`} dir="ltr" className="hover:text-primary">
                               {o.customer_phone || "—"}
                             </a>
+                            {customerWhatsAppLink(o.customer_phone, o.customer_name) && (
+                              <a
+                                href={customerWhatsAppLink(o.customer_phone, o.customer_name)!}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 rounded-full bg-green-600/10 px-2 py-0.5 text-green-700 hover:bg-green-600/20"
+                              >
+                                <MessageCircle size={12} /> واتساب
+                              </a>
+                            )}
                           </div>
                           <div className="flex items-start gap-2 font-body text-xs text-muted-foreground">
                             <MapPin size={12} className="mt-0.5 flex-shrink-0" />
