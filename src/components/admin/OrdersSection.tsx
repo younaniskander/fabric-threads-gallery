@@ -161,6 +161,16 @@ const OrdersSection = () => {
                             <a href={`tel:${o.customer_phone || ""}`} dir="ltr" className="hover:text-primary">
                               {o.customer_phone || "—"}
                             </a>
+                            {customerWhatsAppLink(o.customer_phone, o.customer_name) && (
+                              <a
+                                href={customerWhatsAppLink(o.customer_phone, o.customer_name)!}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 rounded-full bg-green-600/10 px-2 py-0.5 text-green-700 hover:bg-green-600/20"
+                              >
+                                <MessageCircle size={12} /> واتساب
+                              </a>
+                            )}
                           </div>
                           <div className="flex items-start gap-2 font-body text-xs text-muted-foreground">
                             <MapPin size={12} className="mt-0.5 flex-shrink-0" />
