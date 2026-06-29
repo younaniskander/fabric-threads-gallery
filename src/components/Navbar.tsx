@@ -283,6 +283,13 @@ const Navbar = () => {
               </div>
             </div>
 
+            {/* Notifications */}
+            {user && (
+              <div className="hidden md:block">
+                <NotificationBell />
+              </div>
+            )}
+
             {/* User */}
             <Link
               to={user ? "/profile" : "/auth"}
