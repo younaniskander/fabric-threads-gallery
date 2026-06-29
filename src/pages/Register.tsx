@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import mascotHappy from "@/assets/adam-logo-new.png";
 import Seo from "@/components/Seo";
 import { isValidCustomerName, isValidPhone } from "@/lib/phoneAuth";
+import PhoneField from "@/components/PhoneField";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -101,7 +102,7 @@ const Register = () => {
                 <Label htmlFor="phone" className="flex items-center gap-2 font-body text-sm text-foreground">
                   <Phone size={16} /> رقم الهاتف
                 </Label>
-                <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="مثال: +966 50 000 0000" maxLength={20} className="text-right font-body" dir="ltr" required />
+                <PhoneField value={phone} onChange={setPhone} placeholder="رقم الهاتف" />
               </div>
               <Button type="submit" disabled={loading} className="gradient-teal w-full py-3 font-body font-semibold text-primary-foreground">
                 {loading ? <span className="flex items-center gap-2">جاري التسجيل...</span> : <span className="flex items-center gap-2"><UserPlus size={18} /> تسجيل</span>}
