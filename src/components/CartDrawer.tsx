@@ -296,16 +296,6 @@ const CartDrawer = () => {
                 <span>{lang === "ar" ? "المجموع الفرعي" : "Subtotal"}</span>
                 <span>{formatMoney(subtotal, lang)}</span>
               </div>
-              {effectiveDiscount > 0 && (
-                <div className="flex items-center justify-between text-primary">
-                  <span>{lang === "ar" ? `الخصم (${couponCode})` : `Discount (${couponCode})`}</span>
-                  <span>- {formatMoney(effectiveDiscount, lang)}</span>
-                </div>
-              )}
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span>{lang === "ar" ? "الشحن" : "Shipping"}</span>
-                <span>{shippingCost === 0 ? (lang === "ar" ? "مجاني" : "Free") : formatMoney(shippingCost, lang)}</span>
-              </div>
               <div className="flex items-center justify-between border-t border-border pt-1.5">
                 <span className="text-muted-foreground">{lang === "ar" ? "الإجمالي:" : "Total:"}</span>
                 <span className="font-bold text-primary">{formatMoney(grandTotal, lang)}</span>
