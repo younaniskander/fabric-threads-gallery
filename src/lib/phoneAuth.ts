@@ -66,13 +66,30 @@ function normalizeNameForAuth(name: string) {
   return name.trim().replace(/\s+/g, " ").toLowerCase();
 }
 
+// Compact, deterministic 53-bit hash (cyrb53) so the derived password stays
+// well under Supabase's 72-character limit even for long Arabic names.
+function cyrb53(str: string, seed = 0) {
+  let h1 = 0xdeadbeef ^ seed;
+  let h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
 export function phoneToAuthCredentials(phone: string, name: string) {
   const normalized = normalizePhone(phone);
   const digits = normalized.replace(/\D/g, "");
   const normalizedName = normalizeNameForAuth(name);
+  // Hash the name so the password length is bounded (avoids the 72-char limit).
+  const nameHash = cyrb53(normalizedName);
   return {
     email: `phone-${digits}@${AUTH_DOMAIN}`,
-    password: `${PASSWORD_PREFIX}-${digits}-${encodeURIComponent(normalizedName)}`,
+    password: `${PASSWORD_PREFIX}-${digits}-${nameHash}`,
     normalizedPhone: normalized,
   };
 }
