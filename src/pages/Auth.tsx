@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { isValidCustomerName, isValidPhone, phoneToAuthCredentials } from "@/lib/phoneAuth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PhoneField from "@/components/PhoneField";
 import adamLogoLight from "@/assets/adam-logo-new.png";
 import adamLogoDark from "@/assets/adam-logo-new.png";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -36,7 +37,7 @@ const Auth = () => {
     }
 
     if (!isValidPhone(phone)) {
-      toast.error(lang === "ar" ? "اكتب رقم موبايل صحيح مكوّن من 11 رقم" : "Enter a valid 11-digit mobile number");
+      toast.error(lang === "ar" ? "اختر الدولة واكتب رقم هاتف صحيح" : "Select country and enter a valid phone number");
       return;
     }
 
@@ -103,7 +104,7 @@ const Auth = () => {
               <Label className="flex items-center gap-2 font-body text-sm">
                 <Phone size={16} /> {lang === "ar" ? "رقم الهاتف" : "Phone number"}
               </Label>
-              <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} dir="ltr" maxLength={20} required />
+              <PhoneField value={phone} onChange={setPhone} placeholder={lang === "ar" ? "رقم الهاتف" : "Phone number"} />
             </div>
             <Button type="submit" disabled={loading} className="w-full font-body font-semibold">
               {loading
