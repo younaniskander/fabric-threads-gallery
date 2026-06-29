@@ -40,9 +40,6 @@ function customerWhatsAppLink(phone: string | null, name: string | null) {
   const msg = `مرحباً ${name || ""}، بخصوص طلبك من آدم للأقمشة 🛍️`;
   return `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`;
 }
-  const d = new Date(iso);
-  return d.toLocaleDateString("ar-EG", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-}
 function fmtTime(iso: string) {
   return new Date(iso).toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" });
 }
