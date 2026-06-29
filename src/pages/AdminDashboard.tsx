@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
   Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
-  ShoppingCart, Percent, Gift, Search, Puzzle, Building2, Shield, Settings2
+  ShoppingCart, Percent, Gift, Search, Puzzle, Building2, Shield, Settings2,
+  MessageCircle, Bell, Boxes
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -21,8 +22,14 @@ import ModulesSection from "@/components/admin/ModulesSection";
 import BranchesSection from "@/components/admin/BranchesSection";
 import RolesSection from "@/components/admin/RolesSection";
 import LoyaltyRulesSection from "@/components/admin/LoyaltyRulesSection";
+import WhatsappSection from "@/components/admin/WhatsappSection";
+import CrmSection from "@/components/admin/CrmSection";
+import ReportsSection from "@/components/admin/ReportsSection";
+import NotificationsSection from "@/components/admin/NotificationsSection";
+import InventorySection from "@/components/admin/InventorySection";
+import { useModules } from "@/hooks/useModules";
 
-type Tab = "stats" | "fabrics" | "orders" | "customers" | "loyalty" | "loyalty_rules" | "coupons" | "brands" | "messages" | "social" | "modules" | "branches" | "roles";
+type Tab = "stats" | "fabrics" | "orders" | "customers" | "loyalty" | "loyalty_rules" | "coupons" | "brands" | "messages" | "social" | "modules" | "branches" | "roles" | "whatsapp" | "crm" | "reports" | "notifications" | "inventory";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -52,6 +59,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { isEnabled } = useModules();
 
   useEffect(() => {
     checkAdmin();
@@ -87,14 +95,19 @@ const AdminDashboard = () => {
     navigate("/admin-login");
   };
 
-  const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
+  const allTabs: { id: Tab; label: string; icon: any; count?: number; module?: string }[] = [
     { id: "stats", label: "إحصائيات", icon: BarChart3 },
+    { id: "reports", label: "التقارير", icon: BarChart3, module: "reports" },
     { id: "orders", label: "الطلبات", icon: ShoppingCart },
     { id: "fabrics", label: "الأقمشة", icon: Package, count: fabrics.length },
+    { id: "inventory", label: "مخزون الفروع", icon: Boxes, module: "branches" },
     { id: "customers", label: "العملاء", icon: Users, count: customers.length },
+    { id: "crm", label: "شرائح العملاء", icon: Users, module: "crm" },
     { id: "loyalty", label: "نقاط الولاء", icon: Gift },
     { id: "loyalty_rules", label: "قواعد الولاء", icon: Settings2 },
     { id: "coupons", label: "العروض والخصومات", icon: Percent },
+    { id: "whatsapp", label: "واتساب", icon: MessageCircle, module: "whatsapp" },
+    { id: "notifications", label: "الإشعارات", icon: Bell, module: "notifications" },
     { id: "branches", label: "الفروع", icon: Building2 },
     { id: "roles", label: "الأدوار والصلاحيات", icon: Shield },
     { id: "modules", label: "الوحدات", icon: Puzzle },
@@ -102,6 +115,7 @@ const AdminDashboard = () => {
     { id: "messages", label: "الرسائل", icon: MessageSquare, count: messages.filter(m => !m.is_read).length },
     { id: "social", label: "التواصل", icon: LinkIcon },
   ];
+  const tabs = allTabs.filter((t) => !t.module || isEnabled(t.module));
   return (
     <div className="min-h-screen bg-muted">
       <header className="bg-background border-b border-border px-4 py-3 flex items-center justify-between sticky top-0 z-30">
@@ -149,6 +163,11 @@ const AdminDashboard = () => {
             {tab === "branches" && <BranchesSection />}
             {tab === "roles" && <RolesSection />}
             {tab === "modules" && <ModulesSection />}
+            {tab === "whatsapp" && <WhatsappSection />}
+            {tab === "crm" && <CrmSection />}
+            {tab === "reports" && <ReportsSection />}
+            {tab === "notifications" && <NotificationsSection />}
+            {tab === "inventory" && <InventorySection />}
             {tab === "brands" && <BrandsTab brands={brands} onRefresh={fetchAll} />}
             {tab === "messages" && <MessagesTab messages={messages} onRefresh={fetchAll} />}
             {tab === "social" && <SocialTab socialLinks={socialLinks} onRefresh={fetchAll} />}
