@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
   Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
-  ShoppingCart, Percent, Gift, Search
+  ShoppingCart, Percent, Gift, Search, Puzzle, Building2, Shield, Settings2
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,12 @@ import logo from "@/assets/adam-logo-new.png";
 import OrdersSection from "@/components/admin/OrdersSection";
 import CouponsSection from "@/components/admin/CouponsSection";
 import LoyaltySection from "@/components/admin/LoyaltySection";
+import ModulesSection from "@/components/admin/ModulesSection";
+import BranchesSection from "@/components/admin/BranchesSection";
+import RolesSection from "@/components/admin/RolesSection";
+import LoyaltyRulesSection from "@/components/admin/LoyaltyRulesSection";
 
-type Tab = "stats" | "fabrics" | "orders" | "customers" | "loyalty" | "coupons" | "brands" | "messages" | "social";
+type Tab = "stats" | "fabrics" | "orders" | "customers" | "loyalty" | "loyalty_rules" | "coupons" | "brands" | "messages" | "social" | "modules" | "branches" | "roles";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 
@@ -89,7 +93,11 @@ const AdminDashboard = () => {
     { id: "fabrics", label: "الأقمشة", icon: Package, count: fabrics.length },
     { id: "customers", label: "العملاء", icon: Users, count: customers.length },
     { id: "loyalty", label: "نقاط الولاء", icon: Gift },
+    { id: "loyalty_rules", label: "قواعد الولاء", icon: Settings2 },
     { id: "coupons", label: "العروض والخصومات", icon: Percent },
+    { id: "branches", label: "الفروع", icon: Building2 },
+    { id: "roles", label: "الأدوار والصلاحيات", icon: Shield },
+    { id: "modules", label: "الوحدات", icon: Puzzle },
     { id: "brands", label: "الماركات", icon: Tag, count: brands.length },
     { id: "messages", label: "الرسائل", icon: MessageSquare, count: messages.filter(m => !m.is_read).length },
     { id: "social", label: "التواصل", icon: LinkIcon },
@@ -136,7 +144,11 @@ const AdminDashboard = () => {
             {tab === "fabrics" && <FabricsTab fabrics={fabrics} brands={brands} onRefresh={fetchAll} />}
             {tab === "customers" && <CustomersTab customers={customers} onRefresh={fetchAll} />}
             {tab === "loyalty" && <LoyaltySection />}
+            {tab === "loyalty_rules" && <LoyaltyRulesSection />}
             {tab === "coupons" && <CouponsSection />}
+            {tab === "branches" && <BranchesSection />}
+            {tab === "roles" && <RolesSection />}
+            {tab === "modules" && <ModulesSection />}
             {tab === "brands" && <BrandsTab brands={brands} onRefresh={fetchAll} />}
             {tab === "messages" && <MessagesTab messages={messages} onRefresh={fetchAll} />}
             {tab === "social" && <SocialTab socialLinks={socialLinks} onRefresh={fetchAll} />}
