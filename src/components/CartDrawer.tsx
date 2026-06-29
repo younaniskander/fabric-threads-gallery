@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Minus, Trash2, ShoppingBag, Tag, Check, Truck } from "lucide-react";
+import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { formatMoney, parsePriceAmount } from "@/lib/phoneAuth";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 const CartDrawer = () => {
   const { items, removeItem, updateQuantity, clearCart, totalItems, totalPrice, isOpen, setIsOpen } = useCart();
@@ -23,79 +24,42 @@ const CartDrawer = () => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", address: "", notes: "" });
 
-  // Coupon + shipping
-  const [couponInput, setCouponInput] = useState("");
-  const [couponCode, setCouponCode] = useState<string | null>(null);
-  const [discount, setDiscount] = useState(0);
-  const [couponMsg, setCouponMsg] = useState<string | null>(null);
-  const [validating, setValidating] = useState(false);
-  const [shipping, setShipping] = useState({ enabled: true, threshold: 2000, fee: 0 });
-
-  useEffect(() => {
-    supabase
-      .from("shipping_settings")
-      .select("free_shipping_enabled, free_shipping_threshold, shipping_fee")
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data)
-          setShipping({
-            enabled: data.free_shipping_enabled,
-            threshold: Number(data.free_shipping_threshold),
-            fee: Number(data.shipping_fee),
-          });
-      });
-  }, []);
-
   const subtotal = totalPrice;
-  const effectiveDiscount = Math.min(discount, subtotal);
-  const afterDiscount = Math.max(0, subtotal - effectiveDiscount);
-  const shippingCost =
-    shipping.enabled && afterDiscount >= shipping.threshold ? 0 : shipping.fee;
-  const grandTotal = afterDiscount + shippingCost;
-  const remainingForFreeShip = Math.max(0, shipping.threshold - afterDiscount);
+  const grandTotal = subtotal;
   const getItemUnitPrice = (price: number, priceDisplay: string) => price || parsePriceAmount(priceDisplay);
 
-  const couponMessages: Record<string, { ar: string; en: string }> = {
-    not_found: { ar: "كود غير صحيح", en: "Invalid code" },
-    inactive: { ar: "هذا الكود موقوف", en: "Code is inactive" },
-    expired: { ar: "انتهت صلاحية الكود", en: "Code expired" },
-    limit_reached: { ar: "تم استنفاد هذا الكود", en: "Code usage limit reached" },
-    min_order: { ar: "الطلب أقل من الحد الأدنى للكود", en: "Order below coupon minimum" },
-    ok: { ar: "تم تطبيق الخصم!", en: "Discount applied!" },
-  };
+  const buildOrderMessage = () => {
+    const lines = items
+      .map((i, idx) => {
+        const name = lang === "ar" ? i.name : i.nameEn;
+        const unit = getItemUnitPrice(i.price, i.priceDisplay);
+        const color = i.colorName ? ` (${i.colorName})` : "";
+        return `${idx + 1}. ${name}${color} × ${i.quantity} = ${formatMoney(unit * i.quantity, lang)}`;
+      })
+      .join("\n");
 
-  const applyCoupon = async () => {
-    const code = couponInput.trim();
-    if (!code) return;
-    setValidating(true);
-    setCouponMsg(null);
-    const { data, error } = await supabase.rpc("validate_coupon", {
-      _code: code,
-      _subtotal: subtotal,
-    });
-    setValidating(false);
-    const row = Array.isArray(data) ? data[0] : data;
-    if (error || !row) {
-      setCouponMsg(lang === "ar" ? "حدث خطأ، حاول مرة أخرى" : "Error, try again");
-      return;
+    if (lang === "ar") {
+      return (
+        `🛍️ طلب جديد من آدم للأقمشة\n\n` +
+        `👤 الاسم: ${form.name.trim()}\n` +
+        `📞 رقم الهاتف: ${form.phone.trim()}\n` +
+        `📍 العنوان: ${form.address.trim()}\n` +
+        (form.notes.trim() ? `📝 ملاحظات: ${form.notes.trim()}\n` : "") +
+        `\n🧾 المنتجات:\n${lines}\n\n` +
+        `💰 الإجمالي: ${formatMoney(grandTotal, lang)}\n` +
+        `💵 الدفع عند الاستلام`
+      );
     }
-    if (row.valid) {
-      setCouponCode(code.toUpperCase());
-      setDiscount(Number(row.discount));
-      setCouponMsg(couponMessages.ok[lang]);
-    } else {
-      setCouponCode(null);
-      setDiscount(0);
-      setCouponMsg(couponMessages[row.message]?.[lang] || (lang === "ar" ? "كود غير صالح" : "Invalid code"));
-    }
-  };
-
-  const removeCoupon = () => {
-    setCouponCode(null);
-    setDiscount(0);
-    setCouponInput("");
-    setCouponMsg(null);
+    return (
+      `🛍️ New order from ADAM Fabrics\n\n` +
+      `👤 Name: ${form.name.trim()}\n` +
+      `📞 Phone: ${form.phone.trim()}\n` +
+      `📍 Address: ${form.address.trim()}\n` +
+      (form.notes.trim() ? `📝 Notes: ${form.notes.trim()}\n` : "") +
+      `\n🧾 Items:\n${lines}\n\n` +
+      `💰 Total: ${formatMoney(grandTotal, lang)}\n` +
+      `💵 Cash on delivery`
+    );
   };
 
   // Prefill from profile when dialog opens
