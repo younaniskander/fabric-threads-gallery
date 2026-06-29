@@ -171,6 +171,31 @@ const Profile = () => {
                 </div>
               )}
 
+              {tab === "card" && (
+                <div className="space-y-4">
+                  <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "بطاقة الولاء" : "Loyalty Card"}</h2>
+                  {cardToken ? (
+                    <LoyaltyCard
+                      token={cardToken}
+                      name={profile.full_name || profile.phone}
+                      points={points}
+                      levelName={(levels.find((l) => l.key === level)?.[lang === "ar" ? "name_ar" : "name"]) || level}
+                      levelColor={levels.find((l) => l.key === level)?.color || "#cd7f32"}
+                      discount={levels.find((l) => l.key === level)?.discount_percent || 0}
+                      lang={lang}
+                    />
+                  ) : (
+                    <div className="bg-card border border-border rounded-xl p-10 text-center">
+                      <Wallet size={40} className="mx-auto text-muted-foreground mb-3" />
+                      <p className="text-muted-foreground font-body">{lang === "ar" ? "جاري تجهيز بطاقتك..." : "Preparing your card..."}</p>
+                    </div>
+                  )}
+                  <p className="text-center font-body text-xs text-muted-foreground">
+                    {lang === "ar" ? "قريباً: إضافة البطاقة إلى Apple Wallet و Google Wallet" : "Coming soon: Apple Wallet & Google Wallet"}
+                  </p>
+                </div>
+              )}
+
               {tab === "orders" && (
                 <div className="space-y-4">
                   <h2 className="font-display text-xl text-foreground mb-4">{lang === "ar" ? "طلباتي" : "My Orders"}</h2>
