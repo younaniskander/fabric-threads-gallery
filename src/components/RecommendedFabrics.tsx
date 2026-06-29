@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Sparkles } from "lucide-react";
 import { useFabrics } from "@/hooks/useFabrics";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useModules } from "@/hooks/useModules";
 import FabricCard from "@/components/FabricCard";
 import type { Fabric } from "@/data/fabrics";
 
@@ -20,6 +21,7 @@ interface Props {
 const RecommendedFabrics = ({ currentId, category, brand, limit = 4, title }: Props) => {
   const fabrics = useFabrics();
   const { lang } = useLanguage();
+  const { isEnabled } = useModules();
 
   const recommended = useMemo(() => {
     const score = (f: Fabric) => {
@@ -39,7 +41,7 @@ const RecommendedFabrics = ({ currentId, category, brand, limit = 4, title }: Pr
       .slice(0, limit);
   }, [fabrics, currentId, category, brand, limit]);
 
-  if (recommended.length === 0) return null;
+  if (recommended.length === 0 || !isEnabled("recommendations")) return null;
 
   return (
     <section className="py-8">
