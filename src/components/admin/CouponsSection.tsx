@@ -18,6 +18,10 @@ type Coupon = {
   expires_at: string | null;
   usage_limit: number | null;
   used_count: number;
+  starts_at?: string | null;
+  per_user_limit?: number | null;
+  segment_key?: string | null;
+  description?: string;
 };
 
 const emptyForm = {
@@ -27,6 +31,10 @@ const emptyForm = {
   min_order: "",
   usage_limit: "",
   expires_at: "",
+  starts_at: "",
+  per_user_limit: "",
+  segment_key: "",
+  description: "",
 };
 
 const CouponsSection = () => {
@@ -34,6 +42,7 @@ const CouponsSection = () => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [form, setForm] = useState({ ...emptyForm });
   const [saving, setSaving] = useState(false);
+  const [segments, setSegments] = useState<any[]>([]);
   const [shipping, setShipping] = useState({
     id: "",
     free_shipping_enabled: true,
@@ -42,11 +51,13 @@ const CouponsSection = () => {
   });
 
   const fetchAll = async () => {
-    const [c, s] = await Promise.all([
+    const [c, s, seg] = await Promise.all([
       supabase.from("coupons").select("*").order("created_at", { ascending: false }),
       supabase.from("shipping_settings").select("*").limit(1).maybeSingle(),
+      supabase.from("customer_segments").select("*").eq("is_active", true).order("sort_order"),
     ]);
     setCoupons((c.data as Coupon[]) || []);
+    setSegments(seg.data || []);
     if (s.data)
       setShipping({
         id: s.data.id,
@@ -74,6 +85,10 @@ const CouponsSection = () => {
       min_order: Number(form.min_order) || 0,
       usage_limit: form.usage_limit ? Number(form.usage_limit) : null,
       expires_at: form.expires_at ? new Date(form.expires_at).toISOString() : null,
+      starts_at: form.starts_at ? new Date(form.starts_at).toISOString() : null,
+      per_user_limit: form.per_user_limit ? Number(form.per_user_limit) : null,
+      segment_key: form.segment_key || null,
+      description: form.description.trim(),
       is_active: true,
     });
     setSaving(false);
