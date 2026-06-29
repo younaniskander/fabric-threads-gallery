@@ -26,27 +26,12 @@
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://fabric-threads-gallery.lovable.app/fabric/2dd80f34-813f-4924-9f2d-4af6a8068f6f</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fabric-threads-gallery.lovable.app/fabric/a52c6432-d2e7-474a-9578-ee68646013cb</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fabric-threads-gallery.lovable.app/fabric/ef4329ec-a49a-4cef-9293-4afe5f249603</loc>
+    <loc>https://fabric-threads-gallery.lovable.app/fabric/14ddc00e-6800-4fc1-8669-9c1770054684</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://fabric-threads-gallery.lovable.app/category/curtains</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://fabric-threads-gallery.lovable.app/category/upholstery</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
