@@ -5,7 +5,7 @@ import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
   Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
   ShoppingCart, Percent, Gift, Search, Puzzle, Building2, Shield, Settings2,
-  MessageCircle, Bell, Boxes
+  MessageCircle, Bell, Boxes, Pencil
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -279,6 +279,7 @@ const ImageUploader = ({ bucket, onUploaded, currentUrl, isPrivate = false }: { 
 // Fabrics Tab
 const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: any[]; onRefresh: () => void }) => {
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: "", type: "cotton", category: "upholstery", price: "",
     is_featured: false, is_new: false, is_popular: false, coming_soon: false,
@@ -287,16 +288,32 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
   });
   const { toast } = useToast();
 
+  const resetForm = () => {
+    setForm({ name: "", type: "cotton", category: "upholstery", price: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
+    setEditingId(null);
+  };
+
+  const handleEdit = (f: any) => {
+    setForm({
+      name: f.name || "", type: f.type || "cotton", category: f.category || "upholstery",
+      price: f.price || "", is_featured: !!f.is_featured, is_new: !!f.is_new,
+      is_popular: !!f.is_popular, coming_soon: !!f.coming_soon, has_offer: !!f.has_offer,
+      offer_text: f.offer_text || "", in_all_branches: f.in_all_branches !== false,
+      image_url: f.image_url || "",
+    });
+    setEditingId(f.id);
+    setShowForm(true);
+  };
+
   const handleAdd = async () => {
     if (!form.name.trim()) {
       toast({ title: "خطأ", description: "يرجى ملء الكود", variant: "destructive" });
       return;
     }
-    const { error } = await supabase.from("fabrics_db").insert({
+    const payload = {
       name: form.name.trim(),
       type: form.type,
       category: form.category,
-      brand: "",
       price: form.price.trim() || null,
       is_featured: form.is_featured,
       is_new: form.is_new,
@@ -306,13 +323,16 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
       offer_text: form.offer_text.trim() || null,
       in_all_branches: form.in_all_branches,
       image_url: form.image_url || null,
-    });
+    };
+    const { error } = editingId
+      ? await supabase.from("fabrics_db").update(payload).eq("id", editingId)
+      : await supabase.from("fabrics_db").insert({ ...payload, brand: "" });
     if (error) {
-      toast({ title: "خطأ", description: "فشل في إضافة القماش", variant: "destructive" });
+      toast({ title: "خطأ", description: editingId ? "فشل في تعديل القماش" : "فشل في إضافة القماش", variant: "destructive" });
     } else {
-      toast({ title: "تم بنجاح", description: "تم إضافة القماش" });
+      toast({ title: "تم بنجاح", description: editingId ? "تم تعديل القماش" : "تم إضافة القماش" });
       setShowForm(false);
-      setForm({ name: "", type: "cotton", category: "upholstery", price: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
+      resetForm();
       onRefresh();
     }
   };
@@ -328,7 +348,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-xl text-foreground">إدارة الأقمشة</h2>
-        <Button onClick={() => setShowForm(!showForm)} className="gradient-teal text-primary-foreground gap-2 font-body">
+        <Button onClick={() => { if (showForm) { setShowForm(false); resetForm(); } else { resetForm(); setShowForm(true); } }} className="gradient-teal text-primary-foreground gap-2 font-body">
           <Plus size={16} /> إضافة قماش
         </Button>
       </div>
@@ -375,8 +395,8 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={handleAdd} className="gradient-teal text-primary-foreground font-body">حفظ</Button>
-            <Button variant="outline" onClick={() => setShowForm(false)} className="font-body">إلغاء</Button>
+            <Button onClick={handleAdd} className="gradient-teal text-primary-foreground font-body">{editingId ? "حفظ التعديلات" : "حفظ"}</Button>
+            <Button variant="outline" onClick={() => { setShowForm(false); resetForm(); }} className="font-body">إلغاء</Button>
           </div>
         </motion.div>
       )}
@@ -415,9 +435,14 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(f.id)} className="text-destructive">
-                      <Trash2 size={14} />
-                    </Button>
+                    <div className="flex items-center justify-center gap-1">
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(f)} className="text-primary">
+                        <Pencil size={14} />
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(f.id)} className="text-destructive">
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
