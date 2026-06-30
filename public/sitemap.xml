@@ -31,7 +31,17 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://fabric-threads-gallery.lovable.app/fabric/004321ca-4cf3-4f92-b8d0-6169d3250b30</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://fabric-threads-gallery.lovable.app/category/curtains</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://fabric-threads-gallery.lovable.app/category/upholstery</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
