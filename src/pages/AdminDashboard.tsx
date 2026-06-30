@@ -280,8 +280,7 @@ const ImageUploader = ({ bucket, onUploaded, currentUrl, isPrivate = false }: { 
 const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: any[]; onRefresh: () => void }) => {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
-    name: "", name_en: "", type: "cotton", category: "upholstery", brand: "",
-    origin: "", composition: "", gsm: "", price: "",
+    name: "", type: "cotton", category: "upholstery", price: "",
     is_featured: false, is_new: false, is_popular: false, coming_soon: false,
     has_offer: false, offer_text: "", in_all_branches: true,
     image_url: "",
@@ -289,19 +288,15 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
   const { toast } = useToast();
 
   const handleAdd = async () => {
-    if (!form.name.trim() || !form.brand.trim()) {
-      toast({ title: "خطأ", description: "يرجى ملء الاسم والماركة", variant: "destructive" });
+    if (!form.name.trim()) {
+      toast({ title: "خطأ", description: "يرجى ملء الاسم", variant: "destructive" });
       return;
     }
     const { error } = await supabase.from("fabrics_db").insert({
       name: form.name.trim(),
-      name_en: form.name_en.trim() || null,
       type: form.type,
       category: form.category,
-      brand: form.brand.trim(),
-      origin: form.origin.trim() || null,
-      composition: form.composition.trim() || null,
-      gsm: form.gsm ? parseInt(form.gsm) : null,
+      brand: "",
       price: form.price.trim() || null,
       is_featured: form.is_featured,
       is_new: form.is_new,
@@ -317,7 +312,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
     } else {
       toast({ title: "تم بنجاح", description: "تم إضافة القماش" });
       setShowForm(false);
-      setForm({ name: "", name_en: "", type: "cotton", category: "upholstery", brand: "", origin: "", composition: "", gsm: "", price: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
+      setForm({ name: "", type: "cotton", category: "upholstery", price: "", is_featured: false, is_new: false, is_popular: false, coming_soon: false, has_offer: false, offer_text: "", in_all_branches: true, image_url: "" });
       onRefresh();
     }
   };
@@ -342,7 +337,6 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
         <motion.div className="bg-card rounded-xl p-6 shadow-fabric space-y-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div><Label className="font-body text-sm">الاسم بالعربي *</Label><Input value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="font-body" /></div>
-            <div><Label className="font-body text-sm">الاسم بالإنجليزي</Label><Input value={form.name_en} onChange={e => setForm({...form, name_en: e.target.value})} dir="ltr" /></div>
             <div>
               <Label className="font-body text-sm">النوع</Label>
               <Select value={form.type} onValueChange={v => setForm({...form, type: v})}>
@@ -364,10 +358,6 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                 </SelectContent>
               </Select>
             </div>
-            <div><Label className="font-body text-sm">الماركة *</Label><Input value={form.brand} onChange={e => setForm({...form, brand: e.target.value})} className="font-body" /></div>
-            <div><Label className="font-body text-sm">بلد المنشأ</Label><Input value={form.origin} onChange={e => setForm({...form, origin: e.target.value})} className="font-body" /></div>
-            <div><Label className="font-body text-sm">التركيب</Label><Input value={form.composition} onChange={e => setForm({...form, composition: e.target.value})} className="font-body" /></div>
-            <div><Label className="font-body text-sm">GSM</Label><Input type="number" value={form.gsm} onChange={e => setForm({...form, gsm: e.target.value})} dir="ltr" /></div>
             <div><Label className="font-body text-sm">السعر</Label><Input value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="مثال: 250 ج.م / متر" className="font-body" /></div>
             <div><Label className="font-body text-sm">نص العرض / الخصم</Label><Input value={form.offer_text} onChange={e => setForm({...form, offer_text: e.target.value})} placeholder="مثال: خصم 20%" className="font-body" /></div>
             <div>
@@ -400,7 +390,6 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                 <th className="px-4 py-3 text-right">الاسم</th>
                 <th className="px-4 py-3 text-right">النوع</th>
                 <th className="px-4 py-3 text-right">الفئة</th>
-                <th className="px-4 py-3 text-right">الماركة</th>
                 <th className="px-4 py-3 text-right">الحالة</th>
                 <th className="px-4 py-3 text-center">إجراءات</th>
               </tr>
@@ -418,7 +407,6 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                   <td className="px-4 py-3">{f.name}</td>
                   <td className="px-4 py-3">{f.type}</td>
                   <td className="px-4 py-3">{f.category === "upholstery" ? "قماش تنجيد" : f.category === "curtains" ? "مقاس ستائر" : f.category}</td>
-                  <td className="px-4 py-3">{f.brand}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1 flex-wrap">
                       {f.is_featured && <span className="text-xs bg-accent/20 text-accent-foreground px-2 py-0.5 rounded">مميز</span>}
@@ -434,7 +422,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                 </tr>
               ))}
               {fabrics.length === 0 && (
-                <tr><td colSpan={7} className="text-center py-8 text-muted-foreground">لا توجد أقمشة بعد</td></tr>
+                <tr><td colSpan={6} className="text-center py-8 text-muted-foreground">لا توجد أقمشة بعد</td></tr>
               )}
             </tbody>
           </table>
