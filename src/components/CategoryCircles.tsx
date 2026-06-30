@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import fabricVelvet from "@/assets/fabric-velvet.jpg";
-import fabricCotton from "@/assets/fabric-cotton.jpg";
-import fabricSilk from "@/assets/fabric-silk.jpg";
-import fabricLinen from "@/assets/fabric-linen.jpg";
-import fabricSatin from "@/assets/fabric-satin.jpg";
-import fabricDenim from "@/assets/fabric-denim.jpg";
+import fabricVelvet from "@/assets/cat-velvet.jpg";
+import fabricCotton from "@/assets/cat-cotton.jpg";
+import fabricSilk from "@/assets/cat-silk.jpg";
+import fabricLinen from "@/assets/cat-linen.jpg";
+import fabricSatin from "@/assets/cat-satin.jpg";
+import fabricDenim from "@/assets/cat-denim.jpg";
 
 const categories = [
   { id: "velvet", nameAr: "مخمل", nameEn: "Velvet", image: fabricVelvet, filter: "velvet" },

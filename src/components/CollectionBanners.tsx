@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
-import categoryUpholstery from "@/assets/category-upholstery.jpg";
-import categoryCurtains from "@/assets/category-curtains.jpg";
-import heroBanner from "@/assets/hero-banner.jpg";
+import bannerUpholstery from "@/assets/banner-upholstery.jpg";
+import bannerCurtains from "@/assets/banner-curtains.jpg";
+import bannerNewCollection from "@/assets/banner-new-collection.jpg";
 
 const CollectionBanners = () => {
   const { lang, t } = useLanguage();
@@ -12,21 +12,21 @@ const CollectionBanners = () => {
     {
       titleAr: "مجموعة التنجيد",
       titleEn: "Upholstery Collection",
-      image: categoryUpholstery,
+      image: bannerUpholstery,
       link: "/gallery?category=upholstery",
       color: "from-primary/80 to-primary/40",
     },
     {
       titleAr: "وصل حديثاً",
       titleEn: "New Collection",
-      image: heroBanner,
+      image: bannerNewCollection,
       link: "/gallery",
       color: "from-accent/80 to-accent/40",
     },
     {
       titleAr: "مجموعة الستائر",
       titleEn: "Curtains Collection",
-      image: categoryCurtains,
+      image: bannerCurtains,
       link: "/gallery?category=curtains",
       color: "from-gold/80 to-gold/40",
     },
