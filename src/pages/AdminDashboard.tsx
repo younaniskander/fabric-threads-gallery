@@ -348,7 +348,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-xl text-foreground">إدارة الأقمشة</h2>
-        <Button onClick={() => setShowForm(!showForm)} className="gradient-teal text-primary-foreground gap-2 font-body">
+        <Button onClick={() => { if (showForm) { setShowForm(false); resetForm(); } else { resetForm(); setShowForm(true); } }} className="gradient-teal text-primary-foreground gap-2 font-body">
           <Plus size={16} /> إضافة قماش
         </Button>
       </div>
@@ -395,8 +395,8 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={handleAdd} className="gradient-teal text-primary-foreground font-body">حفظ</Button>
-            <Button variant="outline" onClick={() => setShowForm(false)} className="font-body">إلغاء</Button>
+            <Button onClick={handleAdd} className="gradient-teal text-primary-foreground font-body">{editingId ? "حفظ التعديلات" : "حفظ"}</Button>
+            <Button variant="outline" onClick={() => { setShowForm(false); resetForm(); }} className="font-body">إلغاء</Button>
           </div>
         </motion.div>
       )}
@@ -435,9 +435,14 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                     </div>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(f.id)} className="text-destructive">
-                      <Trash2 size={14} />
-                    </Button>
+                    <div className="flex items-center justify-center gap-1">
+                      <Button variant="ghost" size="sm" onClick={() => handleEdit(f)} className="text-primary">
+                        <Pencil size={14} />
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => handleDelete(f.id)} className="text-destructive">
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
