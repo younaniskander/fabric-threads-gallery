@@ -5,7 +5,7 @@ import {
   Users, Package, MessageSquare, Tag, LogOut, BarChart3, Plus, Trash2, Eye, EyeOff,
   Star, Sparkles, Upload, Image as ImageIcon, Link as LinkIcon, Save, Send, ChevronDown, ChevronUp,
   ShoppingCart, Percent, Gift, Search, Puzzle, Building2, Shield, Settings2,
-  MessageCircle, Bell, Boxes
+  MessageCircle, Bell, Boxes, Pencil
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
