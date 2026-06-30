@@ -378,7 +378,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
                 </SelectContent>
               </Select>
             </div>
-            <div><Label className="font-body text-sm">السعر</Label><Input value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="مثال: 250 ج.م / متر" className="font-body" /></div>
+            <div><Label className="font-body text-sm">سعر المتر</Label><Input value={form.price} onChange={e => setForm({...form, price: e.target.value})} placeholder="مثال: 250 ج.م / متر" className="font-body" /></div>
             <div><Label className="font-body text-sm">نص العرض / الخصم</Label><Input value={form.offer_text} onChange={e => setForm({...form, offer_text: e.target.value})} placeholder="مثال: خصم 20%" className="font-body" /></div>
             <div>
               <Label className="font-body text-sm">صورة المنتج</Label>
