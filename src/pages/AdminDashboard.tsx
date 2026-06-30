@@ -289,7 +289,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
 
   const handleAdd = async () => {
     if (!form.name.trim()) {
-      toast({ title: "خطأ", description: "يرجى ملء الاسم", variant: "destructive" });
+      toast({ title: "خطأ", description: "يرجى ملء الكود", variant: "destructive" });
       return;
     }
     const { error } = await supabase.from("fabrics_db").insert({
@@ -336,7 +336,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
       {showForm && (
         <motion.div className="bg-card rounded-xl p-6 shadow-fabric space-y-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div><Label className="font-body text-sm">الاسم بالعربي *</Label><Input value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="font-body" /></div>
+            <div><Label className="font-body text-sm">كود *</Label><Input value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="font-body" /></div>
             <div>
               <Label className="font-body text-sm">النوع</Label>
               <Select value={form.type} onValueChange={v => setForm({...form, type: v})}>
@@ -387,7 +387,7 @@ const FabricsTab = ({ fabrics, brands, onRefresh }: { fabrics: any[]; brands: an
             <thead className="bg-muted">
               <tr>
                 <th className="px-4 py-3 text-right">الصورة</th>
-                <th className="px-4 py-3 text-right">الاسم</th>
+                <th className="px-4 py-3 text-right">الكود</th>
                 <th className="px-4 py-3 text-right">النوع</th>
                 <th className="px-4 py-3 text-right">الفئة</th>
                 <th className="px-4 py-3 text-right">الحالة</th>
