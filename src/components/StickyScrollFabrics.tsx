@@ -2,15 +2,15 @@ import { useRef, useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Link } from "react-router-dom";
 
-import swatchVelvet from "@/assets/swatch-velvet.jpg";
-import swatchCotton from "@/assets/swatch-cotton.jpg";
-import swatchSilk from "@/assets/swatch-silk.jpg";
-import swatchLinen from "@/assets/swatch-linen.jpg";
-import swatchSatin from "@/assets/swatch-satin.jpg";
-import swatchDenim from "@/assets/swatch-denim.jpg";
-import swatchPolyester from "@/assets/swatch-polyester.jpg";
-import swatchVelvet2 from "@/assets/swatch-velvet-2.jpg";
-import swatchCotton2 from "@/assets/swatch-cotton-2.jpg";
+import swatchVelvet from "@/assets/cat-velvet.jpg";
+import swatchCotton from "@/assets/cat-cotton.jpg";
+import swatchSilk from "@/assets/cat-silk.jpg";
+import swatchLinen from "@/assets/cat-linen.jpg";
+import swatchSatin from "@/assets/swatch-curtain-chain.jpg";
+import swatchDenim from "@/assets/cat-denim.jpg";
+import swatchPolyester from "@/assets/swatch-curtain-dots.jpg";
+import swatchVelvet2 from "@/assets/swatch-emerald-velvet.jpg";
+import swatchCotton2 from "@/assets/swatch-terracotta-real.jpg";
 
 interface FabricSlide {
   id: string;

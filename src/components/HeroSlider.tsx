@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import heroBanner from "@/assets/hero-banner.jpg";
-import categoryUpholstery from "@/assets/category-upholstery.jpg";
-import categoryCurtains from "@/assets/category-curtains.jpg";
+import heroVelvet from "@/assets/hero-velvet.jpg";
+import heroUpholstery from "@/assets/hero-upholstery.jpg";
+import heroCurtains from "@/assets/hero-curtains.jpg";
 
 const slides = [
   {
-    image: heroBanner,
+    image: heroVelvet,
     titleAr: "آدم للأقمشة الفاخرة",
     titleEn: "ADAM Premium Fabrics",
     subtitleAr: "اكتشف أرقى أقمشة التنجيد والستائر",
@@ -18,7 +18,7 @@ const slides = [
     link: "/gallery",
   },
   {
-    image: categoryUpholstery,
+    image: heroUpholstery,
     titleAr: "مجموعة التنجيد",
     titleEn: "Upholstery Collection",
     subtitleAr: "أقمشة أنتريهات فاخرة بألوان وخامات متنوعة",
@@ -28,7 +28,7 @@ const slides = [
     link: "/gallery?category=upholstery",
   },
   {
-    image: categoryCurtains,
+    image: heroCurtains,
     titleAr: "مجموعة الستائر",
     titleEn: "Curtains Collection",
     subtitleAr: "ستائر فاخرة بتصاميم عصرية وكلاسيكية",
